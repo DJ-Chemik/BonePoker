@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import pl.chemik.bonepoker.logic.Para;
 
 import android.os.Bundle;
 import android.os.Handler;
