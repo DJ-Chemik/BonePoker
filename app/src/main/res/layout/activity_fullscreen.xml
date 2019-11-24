@@ -9,6 +9,7 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
+
     <TextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
@@ -25,7 +26,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:clickable="false"
+        android:fitsSystemWindows="false">
 
         <LinearLayout
             android:id="@+id/fullscreen_content_controls"
@@ -46,6 +48,64 @@
                 android:text="@string/dummy_button" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/bone1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="120dp"
+            android:cursorVisible="true"
+            android:text="Kość 1"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/bone2"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="120dp"
+            android:cursorVisible="true"
+            android:text="Kość 2"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/bone3"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="120dp"
+            android:cursorVisible="true"
+            android:text="Kość 3"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/bone4"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom|left"
+            android:cursorVisible="true"
+            android:text="Kość 4"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/bone5"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom|center"
+            android:cursorVisible="true"
+            android:text="Kość 5"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/bone6"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom|right|center_horizontal"
+            android:cursorVisible="true"
+            android:text="Kość 6"
+            android:textAlignment="center" />
+
     </FrameLayout>
 
 </FrameLayout>
