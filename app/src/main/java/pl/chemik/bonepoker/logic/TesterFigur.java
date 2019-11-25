@@ -32,10 +32,10 @@ public class TesterFigur {
         posortujKosci();
         if (sprawdzCzyToPoker()==true){
             return new Poker();
+        }else if (sprawdzCzyToFull()==true){ //Full Wcześniej wyszukiwany niż kareta, bo algorytm na karetę znajduje też fulla
+            return new Full();
         }else if (sprawdzCzyToKareta()==true){
             return new Kareta();
-        }else if (sprawdzCzyToFull()==true){
-            return new Full();
         }else if (sprawdzCzyToDuzyStrit()==true){
             return new DuzyStrit();
         }else if (sprawdzCzyToMalyStrit()==true){
@@ -65,24 +65,57 @@ public class TesterFigur {
         return true;
     }
     private boolean sprawdzCzyToKareta(){
-        return false;
+        int licznikBledow = 2; //1 bład sprowadzi do wartości 1, a 2 bledy do 0 i algorytm sie skonczy
+
+        for (int i = 0; i < 4; i++) {
+
+            if (kosci.get(i).getLiczbaOczek()!=kosci.get(i+1).getLiczbaOczek()){
+                licznikBledow--;
+            }
+
+            if (licznikBledow==0){
+                return false;
+            }
+        }
+
+        return true; //jeśli pętla sie skończy i wystąpi tylko 1 błąd to znaczy że to kareta
     }
     private boolean sprawdzCzyToFull(){
-        return false;
+
+        //konfiguracja typu X-X-X-C-C
+        boolean wariant1 = (kosci.get(0).getLiczbaOczek()==kosci.get(1).getLiczbaOczek())
+                            && (kosci.get(1).getLiczbaOczek()==kosci.get(2).getLiczbaOczek())
+                            && (kosci.get(3).getLiczbaOczek()==kosci.get(4).getLiczbaOczek());
+
+        //konfiguracja typu X-X-C-C-C
+        boolean wariant2 = (kosci.get(0).getLiczbaOczek()==kosci.get(1).getLiczbaOczek())
+                && (kosci.get(2).getLiczbaOczek()==kosci.get(3).getLiczbaOczek())
+                && (kosci.get(3).getLiczbaOczek()==kosci.get(4).getLiczbaOczek());
+
+        if (wariant1 || wariant2){
+            return true;
+        }else {
+            return false;
+        }
     }
     private boolean sprawdzCzyToDuzyStrit(){
+        //TODO
         return false;
     }
     private boolean sprawdzCzyToMalyStrit(){
+        //TODO
         return false;
     }
     private boolean sprawdzCzyToTrojka(){
+        //TODO
         return false;
     }
     private boolean sprawdzCzyToDwiePary(){
+        //TODO
         return false;
     }
     private boolean sprawdzCzyToPara(){
+        //TODO
         return false;
     }
 }
