@@ -55,56 +55,67 @@
             android:layout_height="120dp"
             android:layout_gravity="bottom|left"
             android:layout_marginBottom="120dp"
+            android:layout_marginLeft="60dp"
             android:cursorVisible="true"
+            android:onClick="clickButtonBone1"
             android:text="Kość 1"
             android:textAlignment="center" />
 
         <Button
             android:id="@+id/bone2"
+            android:onClick="clickButtonBone2"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="bottom|right"
             android:layout_marginBottom="120dp"
+            android:layout_marginRight="60dp"
             android:cursorVisible="true"
             android:text="Kość 2"
             android:textAlignment="center" />
 
         <Button
             android:id="@+id/bone3"
+            android:onClick="clickButtonBone3"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="120dp"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="0dp"
             android:cursorVisible="true"
             android:text="Kość 3"
             android:textAlignment="center" />
 
         <Button
             android:id="@+id/bone4"
+            android:onClick="clickButtonBone4"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_gravity="bottom|left"
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="0dp"
             android:cursorVisible="true"
             android:text="Kość 4"
             android:textAlignment="center" />
 
         <Button
             android:id="@+id/bone5"
+            android:onClick="clickButtonBone5"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="0dp"
             android:cursorVisible="true"
             android:text="Kość 5"
             android:textAlignment="center" />
 
         <Button
-            android:id="@+id/bone6"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="bottom|right|center_horizontal"
-            android:cursorVisible="true"
-            android:text="Kość 6"
-            android:textAlignment="center" />
+            android:id="@+id/buttonLosujKosci"
+            android:onClick="LosujKosci"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="240dp"
+            android:text="Losuj Kości" />
+
+
 
     </FrameLayout>
 

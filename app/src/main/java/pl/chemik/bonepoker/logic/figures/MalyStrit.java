@@ -1,4 +1,4 @@
-package pl.chemik.bonepoker.logic;
+package pl.chemik.bonepoker.logic.figures;
 
 public class MalyStrit extends Figura {
 }

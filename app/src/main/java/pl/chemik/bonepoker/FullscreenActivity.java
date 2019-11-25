@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import pl.chemik.bonepoker.logic.Para;
+import pl.chemik.bonepoker.logic.System;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+
+import java.util.ArrayList;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -86,6 +89,7 @@ public class FullscreenActivity extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +99,6 @@ public class FullscreenActivity extends AppCompatActivity {
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
-
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +112,10 @@ public class FullscreenActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+
+        /////////////////////////////////////////////////////////////////////////
+        zainicjujButtony();
     }
 
     @Override
@@ -163,4 +170,52 @@ public class FullscreenActivity extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
+
+    //////////////////////////////////////////////////////////////////////////
+    // NIŻEJ STREFA ROBOCZA
+    /////////////////////////////////////////////////////////////////////////
+
+
+    private System system = new System(1);
+
+    ArrayList<Button> buttons = new ArrayList<>();
+
+    private void zainicjujButtony(){
+        buttons.add((Button)findViewById(R.id.bone1));
+        buttons.add((Button)findViewById(R.id.bone2));
+        buttons.add((Button)findViewById(R.id.bone3));
+        buttons.add((Button)findViewById(R.id.bone4));
+        buttons.add((Button)findViewById(R.id.bone5));
+    }
+
+    public void clickButtonBone1(View view){
+
+
+    }
+    public void clickButtonBone2(View view){
+
+
+    }
+    public void clickButtonBone3(View view){
+
+
+    }
+    public void clickButtonBone4(View view){
+
+
+    }
+    public void clickButtonBone5(View view){
+
+
+    }
+
+    public void LosujKosci(View view){
+        system.getListaGraczy().get(0).losujWszystkieKosci();
+        for (int i=0; i<5;i++){
+            buttons.get(i).setText(Integer.toString(system.getListaGraczy().get(0).getKosci().get(i).getLiczbaOczek()));
+
+        }
+
+    }
+
 }
