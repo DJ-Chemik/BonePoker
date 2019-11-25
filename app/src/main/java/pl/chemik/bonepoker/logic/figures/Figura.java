@@ -1,6 +1,9 @@
 package pl.chemik.bonepoker.logic.figures;
 
-public abstract class Figura {
+import pl.chemik.bonepoker.logic.Gracz;
 
-    private int liczbaOczek;
+public class Figura {
+
+
+
 }

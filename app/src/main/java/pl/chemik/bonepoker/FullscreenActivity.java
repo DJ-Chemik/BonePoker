@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import pl.chemik.bonepoker.logic.System;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -198,13 +199,14 @@ public class FullscreenActivity extends AppCompatActivity {
         if (!system.getListaGraczy().get(0).getNumeryKosciDoWymiany().contains(numer)) {
             if (system.getListaGraczy().get(0).getNumerTury()==2) {
                 system.getListaGraczy().get(0).addNumerKosciDoWymiany(numer);
-                buttons.get(numer - 1).setBackgroundColor(Color.DKGRAY);//zamien na cos takiego: buttons.get(numer - 1).setBackgroundTint
+                buttons.get(numer - 1).setBackgroundColor(Color.DKGRAY);
             }
 
         }else {
             if (system.getListaGraczy().get(0).getNumerTury()==2) {
                 system.getListaGraczy().get(0).removeNumerKosciDoWymiany(numer);
-                buttons.get(numer - 1).setBackgroundColor(Color.WHITE);
+                buttons.get(numer - 1).setBackgroundColor(Color.WHITE); //zamien na cos takiego: buttons.get(numer - 1).setBackground (i tam domyślny materiał)
+
             }
         }
     }
@@ -233,16 +235,23 @@ public class FullscreenActivity extends AppCompatActivity {
 
     public void LosujKosci(View view) {
         int numerTury=system.getListaGraczy().get(0).getNumerTury();
+        Button bLos = findViewById(R.id.buttonLosujKosci);
 
         if (numerTury == 1) {
             system.getListaGraczy().get(0).losujWszystkieKosci();
             system.getListaGraczy().get(0).setNumerTury(2);
+            bLos.setText("Wymień zaznaczone niżej kości");
         }
         else if (numerTury==2){
             ArrayList<Integer> numeryKosci = system.getListaGraczy().get(0).getNumeryKosciDoWymiany();
             for (Integer i: numeryKosci) {
                 system.getListaGraczy().get(0).losujKosc(i);
             }
+            for (Button b : buttons){
+                b.setBackgroundColor(Color.WHITE);
+            }
+            bLos.setVisibility(View.INVISIBLE);
+            system.getListaGraczy().get(0).setNumerTury(3);
 
         }
 

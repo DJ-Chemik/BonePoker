@@ -2,7 +2,7 @@ package pl.chemik.bonepoker.logic;
 
 import java.util.Random;
 
-public class Kosc {
+public class Kosc implements Comparable<Kosc>{
     private int liczbaOczek = 0;
 
     public Kosc() {
@@ -18,4 +18,11 @@ public class Kosc {
         return liczbaOczek;
     }
 
+
+    @Override
+    public int compareTo(Kosc compareKosc) {
+        int compareLiczbaOczek = compareKosc.getLiczbaOczek();
+
+        return this.liczbaOczek - compareLiczbaOczek;
+    }
 }
