@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import pl.chemik.bonepoker.logic.System;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -188,33 +189,64 @@ public class FullscreenActivity extends AppCompatActivity {
         buttons.add((Button)findViewById(R.id.bone5));
     }
 
+    /**
+     * Zaznacza lub odznacza kość w zależności czy już była zaznaczona.
+     *
+     * @param numer - wartość od 1 do 5
+     */
+    private void zaznaczKoscDoWymiany(Integer numer){
+        if (!system.getListaGraczy().get(0).getNumeryKosciDoWymiany().contains(numer)) {
+            if (system.getListaGraczy().get(0).getNumerTury()==2) {
+                system.getListaGraczy().get(0).addNumerKosciDoWymiany(numer);
+                buttons.get(numer - 1).setBackgroundColor(Color.DKGRAY);//zamien na cos takiego: buttons.get(numer - 1).setBackgroundTint
+            }
+
+        }else {
+            if (system.getListaGraczy().get(0).getNumerTury()==2) {
+                system.getListaGraczy().get(0).removeNumerKosciDoWymiany(numer);
+                buttons.get(numer - 1).setBackgroundColor(Color.WHITE);
+            }
+        }
+    }
+
     public void clickButtonBone1(View view){
-
-
+        zaznaczKoscDoWymiany(1);
     }
     public void clickButtonBone2(View view){
-
-
+        zaznaczKoscDoWymiany(2);
     }
     public void clickButtonBone3(View view){
-
-
+        zaznaczKoscDoWymiany(3);
     }
     public void clickButtonBone4(View view){
-
-
+        zaznaczKoscDoWymiany(4);
     }
     public void clickButtonBone5(View view){
-
-
+        zaznaczKoscDoWymiany(5);
     }
 
-    public void LosujKosci(View view){
-        system.getListaGraczy().get(0).losujWszystkieKosci();
+    private void wypiszNumeryKosci(){
         for (int i=0; i<5;i++){
             buttons.get(i).setText(Integer.toString(system.getListaGraczy().get(0).getKosci().get(i).getLiczbaOczek()));
+        }
+    }
+
+    public void LosujKosci(View view) {
+        int numerTury=system.getListaGraczy().get(0).getNumerTury();
+
+        if (numerTury == 1) {
+            system.getListaGraczy().get(0).losujWszystkieKosci();
+            system.getListaGraczy().get(0).setNumerTury(2);
+        }
+        else if (numerTury==2){
+            ArrayList<Integer> numeryKosci = system.getListaGraczy().get(0).getNumeryKosciDoWymiany();
+            for (Integer i: numeryKosci) {
+                system.getListaGraczy().get(0).losujKosc(i);
+            }
 
         }
+
+        wypiszNumeryKosci();
 
     }
 
