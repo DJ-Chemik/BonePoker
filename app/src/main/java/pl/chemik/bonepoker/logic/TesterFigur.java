@@ -99,23 +99,80 @@ public class TesterFigur {
         }
     }
     private boolean sprawdzCzyToDuzyStrit(){
-        //TODO
-        return false;
+        if (kosci.get(0).getLiczbaOczek()!=2){
+            return false;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (kosci.get(i+1).getLiczbaOczek()-kosci.get(i).getLiczbaOczek()!=1){
+                return false;
+            }
+        }
+        return true;
+
     }
     private boolean sprawdzCzyToMalyStrit(){
-        //TODO
-        return false;
+        if (kosci.get(0).getLiczbaOczek()!=1){
+            return false;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (kosci.get(i+1).getLiczbaOczek()-kosci.get(i).getLiczbaOczek()!=1){
+                return false;
+            }
+        }
+        return true;
     }
     private boolean sprawdzCzyToTrojka(){
-        //TODO
-        return false;
+        int licznikBledow = 3; //1 bład sprowadzi do wartości 1, a 2 bledy do 0 i algorytm sie skonczy
+        ArrayList<Kosc> trojki = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+
+            if (kosci.get(i).getLiczbaOczek()!=kosci.get(i+1).getLiczbaOczek()){
+                licznikBledow--;
+            }else {
+                if (!trojki.contains(kosci.get(i))){
+                    trojki.add(kosci.get(i));
+                }
+                trojki.add(kosci.get(i+1));
+            }
+
+            if (licznikBledow==0){
+                return false;
+            }
+        }
+
+        if (trojki.size()==3){
+            return true; //jeśli pętla sie skończy i wystąpi tylko 1 błąd to znaczy że to kareta
+        }else{
+            return false;
+        }
     }
     private boolean sprawdzCzyToDwiePary(){
-        //TODO
-        return false;
+        int licznikBledow = 3; //1 bład sprowadzi do wartości 1, a 2 bledy do 0 i algorytm sie skonczy
+
+        for (int i = 0; i < 4; i++) {
+
+            if (kosci.get(i).getLiczbaOczek()!=kosci.get(i+1).getLiczbaOczek()){
+                licznikBledow--;
+            }
+
+            if (licznikBledow==0){
+                return false;
+            }
+        }
+        return true; //jeśli pętla sie skończy i wystąpi tylko 1 błąd to znaczy że to kareta
     }
     private boolean sprawdzCzyToPara(){
-        //TODO
-        return false;
+        int licznikBledow = 4; //1 bład sprowadzi do wartości 1, a 2 bledy do 0 i algorytm sie skonczy
+
+        for (int i = 0; i < 4; i++) {
+            if (kosci.get(i).getLiczbaOczek()!=kosci.get(i+1).getLiczbaOczek()){
+                licznikBledow--;
+            }
+
+            if (licznikBledow==0){
+                return false;
+            }
+        }
+        return true; //jeśli pętla sie skończy i wystąpi tylko 1 błąd to znaczy że to kareta
     }
 }

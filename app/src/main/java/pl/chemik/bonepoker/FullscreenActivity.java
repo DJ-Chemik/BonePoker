@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import pl.chemik.bonepoker.logic.System;
+import pl.chemik.bonepoker.logic.figures.Para;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,7 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -236,11 +238,13 @@ public class FullscreenActivity extends AppCompatActivity {
     public void LosujKosci(View view) {
         int numerTury=system.getListaGraczy().get(0).getNumerTury();
         Button bLos = findViewById(R.id.buttonLosujKosci);
-
+        TextView tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
         if (numerTury == 1) {
             system.getListaGraczy().get(0).losujWszystkieKosci();
-            system.getListaGraczy().get(0).setNumerTury(2);
             bLos.setText("Wymień zaznaczone niżej kości");
+            tvNazwaFigury.setText(tvNazwaFigury.getText() + "Figura");
+            tvNazwaFigury.setVisibility(View.VISIBLE);
+            system.getListaGraczy().get(0).setNumerTury(2);
         }
         else if (numerTury==2){
             ArrayList<Integer> numeryKosci = system.getListaGraczy().get(0).getNumeryKosciDoWymiany();
