@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import pl.chemik.bonepoker.logic.System;
+import pl.chemik.bonepoker.logic.TesterFigur;
 import pl.chemik.bonepoker.logic.figures.Para;
 
 import android.graphics.Color;
@@ -183,6 +184,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private System system = new System(1);
 
     ArrayList<Button> buttons = new ArrayList<>();
+    TesterFigur testerFigur = new TesterFigur(system.getListaGraczy().get(0));
 
     private void zainicjujButtony(){
         buttons.add((Button)findViewById(R.id.bone1));
@@ -191,6 +193,8 @@ public class FullscreenActivity extends AppCompatActivity {
         buttons.add((Button)findViewById(R.id.bone4));
         buttons.add((Button)findViewById(R.id.bone5));
     }
+
+
 
     /**
      * Zaznacza lub odznacza kość w zależności czy już była zaznaczona.
@@ -242,7 +246,7 @@ public class FullscreenActivity extends AppCompatActivity {
         if (numerTury == 1) {
             system.getListaGraczy().get(0).losujWszystkieKosci();
             bLos.setText("Wymień zaznaczone niżej kości");
-            tvNazwaFigury.setText(tvNazwaFigury.getText() + "Figura");
+            tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrócNazwe());
             tvNazwaFigury.setVisibility(View.VISIBLE);
             system.getListaGraczy().get(0).setNumerTury(2);
         }
@@ -254,6 +258,7 @@ public class FullscreenActivity extends AppCompatActivity {
             for (Button b : buttons){
                 b.setBackgroundColor(Color.WHITE);
             }
+            tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrócNazwe());
             bLos.setVisibility(View.INVISIBLE);
             system.getListaGraczy().get(0).setNumerTury(3);
 

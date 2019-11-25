@@ -52,6 +52,29 @@ public class TesterFigur {
 
     }
 
+    public String znajdzFiguryIZwrócNazwe(){
+        posortujKosci();
+        if (sprawdzCzyToPoker()==true){
+            return "Poker";
+        }else if (sprawdzCzyToFull()==true){ //Full Wcześniej wyszukiwany niż kareta, bo algorytm na karetę znajduje też fulla
+            return "Full";
+        }else if (sprawdzCzyToKareta()==true){
+            return "Kareta";
+        }else if (sprawdzCzyToDuzyStrit()==true){
+            return "Duży Strit";
+        }else if (sprawdzCzyToMalyStrit()==true){
+            return "Mały Strit";
+        }else if (sprawdzCzyToTrojka()==true){
+            return "Trójka";
+        }else if (sprawdzCzyToDwiePary()==true){
+            return "Dwie Pary";
+        }else if (sprawdzCzyToPara()==true){
+            return "Para";
+        }else{
+            return "Nic :(";
+        }
+    };
+
     private void posortujKosci(){
         Collections.sort(kosci);
     }
