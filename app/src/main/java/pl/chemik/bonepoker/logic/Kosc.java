@@ -11,7 +11,7 @@ public class Kosc implements Comparable<Kosc>{
 
     public void losujLiczbe(){
         Random generator = new Random();
-        liczbaOczek=generator.nextInt(5)+1; //zakres 1-6
+        liczbaOczek=generator.nextInt(6)+1; //zakres 1-6
     }
 
     public int getLiczbaOczek() {
