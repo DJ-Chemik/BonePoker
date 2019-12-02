@@ -20,6 +20,63 @@
 
 using namespace std;
 
+/*
+    Serwer musi odbierać info o wynikach i je porównywać
+    Serwer otrzymuje od klienta 3 liczby z info o wynikach.
+    Im większe liczby tym lepsze.
+        
+    #1 - jaka figura [0-8]
+        -[0] - Nic
+        -[1] - Para
+        -[2] - Dwie Pary
+        -[3] - Trójka
+        -[4] - Mały Strit
+        -[5] - Duży Strit
+        -[6] - Full
+        -[7] - Kareta
+        -[8] - Poker
+
+    #2 - jakie są liczby znaczące w danej wigurze (sprawdzane tylko gdy #1 są równe)
+        -[0] - Nic [5-30]
+                - suma wszystkich oczek
+        -[1] - Para [1-6]
+                - w zależności z jakich liczb składa się Para
+        -[2] - Dwie Pary [2-12]
+                - jedna para daje liczbe [1-6] i druga tez. Później sumujemy i suma jest liczbą #2
+        -[3] - Trójka [1-6]
+                - w zależności z jakich kości składa się Trójka
+        -[4] - Mały Strit [0]
+                ----  zawsze 0
+        -[5] - Duży Strit [0]
+                ---- zawsze 0
+        -[6] - Full [1-6]
+                - w zależności z jakich kości składa się Trójka w tym Fullu
+        -[7] - Kareta [1-6]
+                - w zależności z jakich kości składa się Kareta
+        -[8] - Poker [1-6]
+                - w zależności z jakich kości składa się Poker
+
+    #3 - punkty za kości które nie wchodzą w skład figury (wyjątek Full) 
+        (rzadko sprawdzane, tylko gdy poprzednie są równe)
+        -[0] - Nic [0]
+                ---- zawsze 0
+        -[1] - Para [3-18]
+                - suma liczby oczek na wolneych 3 kościach
+        -[2] - Dwie Pary [1-6]
+                - liczba oczek na wolnej kości
+        -[3] - Trójka [2-12]
+                - suma liczby oczek na wolneych 2 kościach
+        -[4] - Mały Strit [0]
+                ---- zawsze 0
+        -[5] - Duży Strit [0]
+                ---- zawsze 0
+        -[6] - Full [1-6]
+                - w zależności z jakich oczek składa się para w Fullu
+        -[7] - Kareta [1-6]
+                - liczba oczek na wolnej kości
+        -[8] - Poker [0]
+                ---- zawsze 0
+*/
 
 int main()
 {
@@ -53,17 +110,6 @@ int main()
         cout<<"Connection from "<<inet_ntoa(caddr.sin_addr)<<":"<<caddr.sin_port<<endl;
         int rc=read(cfd, buf, BUFFER_SIZE);
 
-        /*for(int i=0;i<indeksy.size();i++)
-        {
-            if(strncmp(buf, (const char*)indeksy[i].c_str(), indeksy[i].size())==0)
-            {
-                write(cfd, (const char*)nazwiska[i].c_str(),nazwiska[i].size());
-            }
-            else
-            {
-                write(cfd,"Error\n",6);
-            }  
-        }*/
 
         if(strncmp(buf, "132336", 6)==0)
         {
