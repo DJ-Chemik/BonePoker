@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <functional>
 #include <thread>
 #include <map>
@@ -78,44 +79,133 @@ using namespace std;
                 ---- zawsze 0
 */
 
+class Gracz{
+public:
+        int hash;
+        int hash0=getCyfraFromLiczba(hash, 4);
+        int hash1=getCyfraFromLiczba(hash, 3);
+        int hash2=getCyfraFromLiczba(hash, 2);
+        int hash3=getCyfraFromLiczba(hash, 1);
+        bool czy_wygral = false;
+        int liczba_punktow;
+};
+
+int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca)
+{
+
+    int x;
+    if(nrCyfryOdKonca==1){
+        return liczba%10;
+    }else if(nrCyfryOdKonca==2){
+        x=(liczba%100);
+        return x/10;
+    }else if(nrCyfryOdKonca==3){
+        x=(liczba%1000);
+        return x/100;
+    }else if(nrCyfryOdKonca==4){
+        x=(liczba%10000);
+        return x/1000;
+    }else if(nrCyfryOdKonca==5){
+        x=(liczba%100000);
+        return x/10000;
+    }else if(nrCyfryOdKonca==6){
+        x=(liczba%1000000);
+        return x/100000;
+    }else{
+        return -1;
+    }
+}
+
+char* sendToServer(int deskryptor, int hashToSend, int length)
+{
+    stringstream ss;
+    
+    ss.str("");
+    ss<<hashToSend;
+    string temp = ss.str();
+    char* charToSend = (char*)temp.c_str();
+        
+    write(deskryptor,charToSend,length);
+    return charToSend;
+}
+
+/**
+ * -3punkty za zwycięztwo, 0 za przegraną
+ * -każda figura ma określony nr i przyznawane są też punkty za różnicę figury 1 gracza i drugiego
+ *      np. full[6]-para[1]=5punktów dla zwycięzcy dodatkowe
+ */
+int obliczWynikGracza(int hash1){
+    
+
+}
+
+//1 - gdy wygrywa gracz 1, 2 - gdy wygrywa gracz 2, 0 - gdy remis, -1 gdy błąd
+int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
+  
+    if(gracz1.hash0==0 && gracz2.hash0==0){
+        if(gracz1.hash1>gracz2.hash1){
+                gracz1.czy_wygral=true;
+                return 1;
+        }else if (gracz1.hash1<gracz2.hash1){
+                gracz2.czy_wygral=true;
+                return 2;
+        }else
+        {
+                if(gracz1.hash2>gracz2.hash2){
+                        gracz1.czy_wygral=true;
+                        return 1;
+                }else if (gracz1.hash2<gracz2.hash2){
+                        gracz2.czy_wygral=true;
+                        return 2;  
+                }else{
+                        if(gracz1.hash3>gracz2.hash3){
+                                gracz1.czy_wygral=true;
+                                return 1;
+                         }else if (gracz1.hash3<gracz2.hash3){
+                                gracz2.czy_wygral=true;
+                                return 2;
+                        }else{
+                              return 0;  
+                        }
+      
+    }else{
+        return -1;
+    }
+}
+
 int main()
 {
-    int fd, cfd, on=1;
+    int fd, cfd1, cfd2, on=1;
     int port = 1234;
-    struct sockaddr_in server_addr, client_addr;
+    struct sockaddr_in server_addr, client1_addr;
     socklen_t length;
     fd=socket(PF_INET, SOCK_STREAM, 0);
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
     server_addr.sin_family=PF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port=htons(port);
-
     bind(fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
     listen(fd, 10);
-    char buf[BUFFER_SIZE];
-
-    vector<string> indeksy = {"136809", "132336"};;
-    vector<string> nazwiska ={"Szymon Szczepański\n","Kamil Wężniejewski\n"};
+    Gracz gracz1, gracz2;
     
     while(true)
     {
-        length=sizeof(client_addr);
-        cfd=accept(fd, (struct sockaddr*) &client_addr, &length);
-        cout<<"Connection from "<<inet_ntoa(client_addr.sin_addr)<<":"<<client_addr.sin_port<<endl;
-        int sizeReadData=read(cfd, buf, BUFFER_SIZE);
-        int kod = atoi(buf);
-        write(1,buf,sizeReadData);
-        write(cfd, "Przesłano kod\n",sizeof("Przesłano kod\n"));
-        if(strncmp(buf, "132336", 6)==0)
-        {
-            write(cfd, "Kamil Wężniejewski\n",sizeof("Kamil Wężniejewski\n"));
-        }else if(strncmp(buf, "136809", 6)==0){
-            write(cfd, "Szymon Szczepański\n",sizeof("Szymon Szczepański\n"));
-        }else{
-            write(cfd, "Błąd\n", 5);
-        }  
+        char buf[BUFFER_SIZE];
+        length=sizeof(client1_addr);
+        cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
+        cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
+        int sizeReadData=read(cfd1, buf, BUFFER_SIZE);
+        
+        gracz1.hash = atoi(buf);
+        //write(1,buf ,sizeReadData);
+        
+        sendToServer(cfd1, gracz1.hash,4);
 
-        close(cfd);
+        //if(strncmp(buf, "123", 3)==0)
+        
+
+        close(cfd1);
+        memset(buf, 0, sizeof(buf));
 
     }
     close(fd);
