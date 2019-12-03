@@ -80,14 +80,41 @@ using namespace std;
 */
 
 class Gracz{
+
+        int hash=0;
 public:
-        int hash;
         int hash0=getCyfraFromLiczba(hash, 4);
         int hash1=getCyfraFromLiczba(hash, 3);
         int hash2=getCyfraFromLiczba(hash, 2);
         int hash3=getCyfraFromLiczba(hash, 1);
+        
+
         bool czy_wygral = false;
         int liczba_punktow;
+       
+       void setHash(int liczba){
+                hash=liczba;
+                hash0=getCyfraFromLiczba(hash, 4);
+                hash1=getCyfraFromLiczba(hash, 3);
+                hash2=getCyfraFromLiczba(hash, 2);
+                hash3=getCyfraFromLiczba(hash, 1);
+       }
+       
+       int getHashCaly(){
+                return hash;
+       }
+       int getHash0(){
+               return hash0;
+       }
+       int getHash1(){
+               return hash1;
+       }
+       int getHash2(){
+               return hash2;
+       }
+       int getHash3(){
+               return hash3;
+       }
         
         
         int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca)
@@ -127,7 +154,13 @@ public:
                         punkty+=3;
                 }
                 punkty+=hash1;
+                cout<<"Hash0: "<<hash0<<endl;
+                cout<<"Hash1: "<<hash1<<endl;
+                cout<<"Hash2: "<<hash2<<endl;
+                cout<<"Hash3: "<<hash3<<endl;
+                
                 liczba_punktow=punkty;
+                cout<<"Punkty: "<<punkty<<endl;
                 return punkty;                
         }
 
@@ -198,20 +231,22 @@ int main()
     server_addr.sin_port=htons(port);
     bind(fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
     listen(fd, 10);
-    Gracz gracz1, gracz2;
     
+    Gracz gracz1, gracz2;
     while(true)
     {
+        
         char buf[BUFFER_SIZE];
         length=sizeof(client1_addr);
         cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
         cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
         int sizeReadData=read(cfd1, buf, BUFFER_SIZE);
         
-        gracz1.hash = atoi(buf);
+        gracz1.setHash(atoi(buf));
         //write(1,buf ,sizeReadData);
-        cout<<gracz1.obliczWynikGracza()<<endl;
-        sendTo(cfd1, gracz1.hash,4);
+        cout<<"Hash Cały: "<<gracz1.getHashCaly()<<endl;
+        gracz1.obliczWynikGracza();
+        sendTo(cfd1, gracz1.getHashCaly(),4);
 
         //if(strncmp(buf, "123", 3)==0)
         
