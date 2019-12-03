@@ -90,37 +90,52 @@ public:
         int liczba_punktow;
         
         
-int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca)
-{
+        int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca)
+        {
 
-    int x;
-    if(nrCyfryOdKonca==1){
-        return liczba%10;
-    }else if(nrCyfryOdKonca==2){
-        x=(liczba%100);
-        return x/10;
-    }else if(nrCyfryOdKonca==3){
-        x=(liczba%1000);
-        return x/100;
-    }else if(nrCyfryOdKonca==4){
-        x=(liczba%10000);
-        return x/1000;
-    }else if(nrCyfryOdKonca==5){
-        x=(liczba%100000);
-        return x/10000;
-    }else if(nrCyfryOdKonca==6){
-        x=(liczba%1000000);
-        return x/100000;
-    }else{
-        return -1;
-    }
-}
+        int x;
+        if(nrCyfryOdKonca==1){
+                return liczba%10;
+        }else if(nrCyfryOdKonca==2){
+                x=(liczba%100);
+                return x/10;
+        }else if(nrCyfryOdKonca==3){
+                x=(liczba%1000);
+                return x/100;
+        }else if(nrCyfryOdKonca==4){
+                x=(liczba%10000);
+                return x/1000;
+        }else if(nrCyfryOdKonca==5){
+                x=(liczba%100000);
+                return x/10000;
+        }else if(nrCyfryOdKonca==6){
+                x=(liczba%1000000);
+                return x/100000;
+        }else{
+                return -1;
+        }
+        }
+
+        /**
+         * -3punkty za zwycięztwo, 0 za przegraną
+         * -każda figura ma określony nr i przyznawane są punkty za tą figurę równą jej numerowi
+         */
+        int obliczWynikGracza(){
+                int punkty = 0;
+                if (czy_wygral==true)
+                {
+                        punkty+=3;
+                }
+                punkty+=hash1;
+                liczba_punktow=punkty;
+                return punkty;                
+        }
+
 };
 
 
 
-char* sendToServer(int deskryptor, int hashToSend, int length)
-{
+char* sendTo(int deskryptor, int hashToSend, int length){
     stringstream ss;
     
     ss.str("");
@@ -132,15 +147,7 @@ char* sendToServer(int deskryptor, int hashToSend, int length)
     return charToSend;
 }
 
-/**
- * -3punkty za zwycięztwo, 0 za przegraną
- * -każda figura ma określony nr i przyznawane są też punkty za różnicę figury 1 gracza i drugiego
- *      np. full[6]-para[1]=5punktów dla zwycięzcy dodatkowe
- */
-int obliczWynikGracza(int hash1){
-    
 
-}
 
 //1 - gdy wygrywa gracz 1, 2 - gdy wygrywa gracz 2, 0 - gdy remis, -1 gdy błąd
 int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
@@ -203,8 +210,8 @@ int main()
         
         gracz1.hash = atoi(buf);
         //write(1,buf ,sizeReadData);
-        
-        sendToServer(cfd1, gracz1.hash,4);
+        cout<<gracz1.obliczWynikGracza()<<endl;
+        sendTo(cfd1, gracz1.hash,4);
 
         //if(strncmp(buf, "123", 3)==0)
         
