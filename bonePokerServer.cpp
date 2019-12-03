@@ -88,8 +88,8 @@ public:
         int hash3=getCyfraFromLiczba(hash, 1);
         bool czy_wygral = false;
         int liczba_punktow;
-};
-
+        
+        
 int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca)
 {
 
@@ -115,6 +115,9 @@ int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca)
         return -1;
     }
 }
+};
+
+
 
 char* sendToServer(int deskryptor, int hashToSend, int length)
 {
@@ -167,6 +170,8 @@ int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
                         }else{
                               return 0;  
                         }
+                }
+        }
       
     }else{
         return -1;
