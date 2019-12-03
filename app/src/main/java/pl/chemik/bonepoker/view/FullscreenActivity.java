@@ -1,9 +1,10 @@
-package pl.chemik.bonepoker;
+package pl.chemik.bonepoker.view;
 
 import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import pl.chemik.bonepoker.R;
 import pl.chemik.bonepoker.logic.System;
 import pl.chemik.bonepoker.logic.TesterFigur;
 import pl.chemik.bonepoker.logic.figures.Para;

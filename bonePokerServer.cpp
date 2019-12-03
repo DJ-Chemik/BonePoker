@@ -82,35 +82,30 @@ int main()
 {
     int fd, cfd, on=1;
     int port = 1234;
-    struct sockaddr_in saddr, caddr;
-    socklen_t l;
+    struct sockaddr_in server_addr, client_addr;
+    socklen_t length;
     fd=socket(PF_INET, SOCK_STREAM, 0);
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
-    saddr.sin_family=PF_INET;
-    saddr.sin_addr.s_addr = INADDR_ANY;
-    saddr.sin_port=htons(port);
+    server_addr.sin_family=PF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port=htons(port);
 
-    bind(fd, (struct sockaddr*) &saddr, sizeof(saddr));
+    bind(fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
     listen(fd, 10);
     char buf[BUFFER_SIZE];
-
-    map<string, string> mapa =
-    {
-        {"132336", "Kamil Wężniejewski\n"},
-        {"136809", "Szymon Szczepański\n"}
-    };
 
     vector<string> indeksy = {"136809", "132336"};;
     vector<string> nazwiska ={"Szymon Szczepański\n","Kamil Wężniejewski\n"};
     
     while(true)
     {
-        l=sizeof(caddr);
-        cfd=accept(fd, (struct sockaddr*) &caddr, &l);
-        cout<<"Connection from "<<inet_ntoa(caddr.sin_addr)<<":"<<caddr.sin_port<<endl;
-        int rc=read(cfd, buf, BUFFER_SIZE);
-
-
+        length=sizeof(client_addr);
+        cfd=accept(fd, (struct sockaddr*) &client_addr, &length);
+        cout<<"Connection from "<<inet_ntoa(client_addr.sin_addr)<<":"<<client_addr.sin_port<<endl;
+        int sizeReadData=read(cfd, buf, BUFFER_SIZE);
+        int kod = atoi(buf);
+        write(1,buf,sizeReadData);
+        write(cfd, "Przesłano kod\n",sizeof("Przesłano kod\n"));
         if(strncmp(buf, "132336", 6)==0)
         {
             write(cfd, "Kamil Wężniejewski\n",sizeof("Kamil Wężniejewski\n"));
