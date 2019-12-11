@@ -128,7 +128,7 @@
             android:visibility="invisible" />
 
         <TextView
-            android:id="@+id/tv_runda"
+            android:id="@+id/tvRunda"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Runda 1/5"
@@ -138,16 +138,16 @@
             />
 
         <TextView
-            android:id="@+id/tv_tura"
+            android:id="@+id/tvTura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tura 1/2"
-            android:textSize="24sp"
             android:layout_gravity="top|right"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="40dp"
+            android:text="Tura 1/2"
+            android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/tv_wynik_gracza"
+            android:id="@+id/tvWynikGracza"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Twój Wynik: 0"
@@ -156,16 +156,16 @@
             android:layout_marginTop="0dp" />
 
         <TextView
-            android:id="@+id/tv_wynik_przeciwnika"
+            android:id="@+id/tvWynikPrzeciwnika"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Przeciwnik: 0"
-            android:textSize="24sp"
             android:layout_gravity="top|left"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="40dp"
+            android:text="Przeciwnik: 0"
+            android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/tv_tmp_wynik_gracza"
+            android:id="@+id/tvTmpWynikGracza"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ty po 1 turze: 0"
@@ -174,7 +174,7 @@
             android:layout_marginTop="80dp" />
 
         <TextView
-            android:id="@+id/tv_tmp_wynik_przeciwnika"
+            android:id="@+id/tvTmpWynikPrzeciwnika"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Przeciwnik po 1 turze: 0"

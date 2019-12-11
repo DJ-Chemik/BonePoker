@@ -2,15 +2,15 @@ package pl.chemik.bonepoker.logic;
 
 import java.util.ArrayList;
 
-public class System {
+public class SystemGry {
     private int liczbaGraczy = 2;
     private ArrayList<Gracz> listaGraczy = new ArrayList<>();
 
-    public System() {
+    public SystemGry() {
         dodajGraczy();
     }
 
-    public System(int liczbaGraczy) {
+    public SystemGry(int liczbaGraczy) {
         this.liczbaGraczy=liczbaGraczy;
         dodajGraczy();
     }

@@ -15,11 +15,7 @@ public class ServerConnect {
 
         try {
             serverAddr = InetAddress.getByName(ipServer);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
 
-        try {
             socket = new Socket(serverAddr, portServer);
         } catch (IOException e) {
             e.printStackTrace();

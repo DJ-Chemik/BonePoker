@@ -5,13 +5,11 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import pl.chemik.bonepoker.R;
-import pl.chemik.bonepoker.logic.System;
+import pl.chemik.bonepoker.logic.SystemGry;
 import pl.chemik.bonepoker.logic.TesterFigur;
-import pl.chemik.bonepoker.logic.figures.Para;
 import pl.chemik.bonepoker.network.ServerConnect;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -19,22 +17,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * An example full-screen activity that shows and hides the systemGry UI (i.e.
+ * status bar and navigation/systemGry bar) with user interaction.
  */
 public class FullscreenActivity extends AppCompatActivity {
     /**
-     * Whether or not the system UI should be auto-hidden after
+     * Whether or not the systemGry UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
      */
     private static final boolean AUTO_HIDE = true;
 
     /**
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
+     * user interaction before hiding the systemGry UI.
      */
     private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
 
@@ -83,7 +88,7 @@ public class FullscreenActivity extends AppCompatActivity {
     };
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
+     * systemGry UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
@@ -107,7 +112,7 @@ public class FullscreenActivity extends AppCompatActivity {
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
-        // Set up the user interaction to manually show or hide the system UI.
+        // Set up the user interaction to manually show or hide the systemGry UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +128,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
         zainicjujButtony();
+
 
     }
 
@@ -160,7 +166,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
     @SuppressLint("InlinedApi")
     private void show() {
-        // Show the system bar
+        // Show the systemGry bar
         mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         mVisible = true;
@@ -184,12 +190,11 @@ public class FullscreenActivity extends AppCompatActivity {
     /////////////////////////////////////////////////////////////////////////
 
 
-    private System system = new System(1);
-    private ServerConnect serverConnect;
-    private Thread thread = new Thread();
+    private SystemGry systemGry = new SystemGry(1);
+
 
     ArrayList<Button> buttons = new ArrayList<>();
-    TesterFigur testerFigur = new TesterFigur(system.getListaGraczy().get(0));
+    TesterFigur testerFigur = new TesterFigur(systemGry.getListaGraczy().get(0));
 
     private void zainicjujButtony(){
         buttons.add((Button)findViewById(R.id.bone1));
@@ -207,15 +212,15 @@ public class FullscreenActivity extends AppCompatActivity {
      * @param numer - wartość od 1 do 5
      */
     private void zaznaczKoscDoWymiany(Integer numer){
-        if (!system.getListaGraczy().get(0).getNumeryKosciDoWymiany().contains(numer)) {
-            if (system.getListaGraczy().get(0).getNumerTury()==2) {
-                system.getListaGraczy().get(0).addNumerKosciDoWymiany(numer);
+        if (!systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany().contains(numer)) {
+            if (systemGry.getListaGraczy().get(0).getNumerTury()==2) {
+                systemGry.getListaGraczy().get(0).addNumerKosciDoWymiany(numer);
                 buttons.get(numer - 1).setBackgroundColor(Color.DKGRAY);
             }
 
         }else {
-            if (system.getListaGraczy().get(0).getNumerTury()==2) {
-                system.getListaGraczy().get(0).removeNumerKosciDoWymiany(numer);
+            if (systemGry.getListaGraczy().get(0).getNumerTury()==2) {
+                systemGry.getListaGraczy().get(0).removeNumerKosciDoWymiany(numer);
                 buttons.get(numer - 1).setBackgroundColor(Color.WHITE); //zamien na cos takiego: buttons.get(numer - 1).setBackground (i tam domyślny materiał)
 
             }
@@ -240,41 +245,57 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private void wypiszNumeryKosci(){
         for (int i=0; i<5;i++){
-            buttons.get(i).setText(Integer.toString(system.getListaGraczy().get(0).getKosci().get(i).getLiczbaOczek()));
+            buttons.get(i).setText(Integer.toString(systemGry.getListaGraczy().get(0).getKosci().get(i).getLiczbaOczek()));
         }
     }
 
     public void polaczZSerwerem(){
+        Thread thread;
+        Runnable runnable =
+                () -> {
+                   ServerConnect serverConnect =new ServerConnect();
+                   serverConnect.connect();
+                };
+        thread=new Thread(runnable);
+        thread.setDaemon(true);
+        thread.start();
+        thread.interrupt();
 
     }
 
+
     public void LosujKosci(View view) {
-        int numerTury=system.getListaGraczy().get(0).getNumerTury();
+        int numerTury= systemGry.getListaGraczy().get(0).getNumerTury();
         Button bLos = findViewById(R.id.buttonLosujKosci);
         TextView tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
+
+        polaczZSerwerem();
+
+
         if (numerTury == 1) {
-            system.getListaGraczy().get(0).losujWszystkieKosci();
+            systemGry.getListaGraczy().get(0).losujWszystkieKosci();
             bLos.setText("Wymień zaznaczone niżej kości");
             tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrócNazwe());
             tvNazwaFigury.setVisibility(View.VISIBLE);
-            system.getListaGraczy().get(0).setNumerTury(2);
+            systemGry.getListaGraczy().get(0).setNumerTury(2);
         }
         else if (numerTury==2){
-            ArrayList<Integer> numeryKosci = system.getListaGraczy().get(0).getNumeryKosciDoWymiany();
+            ArrayList<Integer> numeryKosci = systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany();
             for (Integer i: numeryKosci) {
-                system.getListaGraczy().get(0).losujKosc(i);
+                systemGry.getListaGraczy().get(0).losujKosc(i);
             }
             for (Button b : buttons){
                 b.setBackgroundColor(Color.WHITE);
             }
             tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrócNazwe());
             bLos.setVisibility(View.INVISIBLE);
-            system.getListaGraczy().get(0).setNumerTury(3);
+            systemGry.getListaGraczy().get(0).setNumerTury(3);
 
         }
 
         wypiszNumeryKosci();
 
     }
+
 
 }
