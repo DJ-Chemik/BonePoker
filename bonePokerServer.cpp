@@ -235,7 +235,7 @@ int main()
         gracz1.setHash(atoi(buf));
         //write(1,buf ,sizeReadData);
         cout<<gracz1.obliczWynikGracza()<<endl;
-        sendTo(cfd1, gracz1.getHash(),4);
+        sendTo(cfd1, gracz1.getHash()-1111,4);
 
         //if(strncmp(buf, "123", 3)==0)
         
