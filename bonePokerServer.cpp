@@ -82,18 +82,34 @@ using namespace std;
 */
 
 class Gracz{
-public:
+
         int hash;
-        int hash0=getCyfraFromLiczba(hash, 4);
-        int hash1=getCyfraFromLiczba(hash, 3);
-        int hash2=getCyfraFromLiczba(hash, 2);
-        int hash3=getCyfraFromLiczba(hash, 1);
+public:
+        int hash0;
+        int hash1;
+        int hash2;
+        int hash3;
         bool czy_wygral = false;
         int liczba_punktow;
+
+        Gracz(){
+                hash=0;
+                hash0=0;
+                hash1=0;
+                hash2=0;
+                hash3=0;        
+        }
+
+        void setHash(int newHash){
+                this.hash=newHash;
+                hash0=getCyfraFromLiczba(hash, 4);
+                hash1=getCyfraFromLiczba(hash, 3);
+                hash2=getCyfraFromLiczba(hash, 2);
+                hash3=getCyfraFromLiczba(hash, 1);        
+        }
         
         
-        int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca)
-        {
+        int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca){
 
         int x;
         if(nrCyfryOdKonca==1){
@@ -212,7 +228,7 @@ int main()
         cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
         int sizeReadData=read(cfd1, buf, BUFFER_SIZE);
         
-        gracz1.hash = atoi(buf);
+        gracz1.setHash(atoi(buf));
         //write(1,buf ,sizeReadData);
         cout<<gracz1.obliczWynikGracza()<<endl;
         sendTo(cfd1, gracz1.hash,4);
