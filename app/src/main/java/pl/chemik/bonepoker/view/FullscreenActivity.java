@@ -186,6 +186,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private System system = new System(1);
     private ServerConnect serverConnect;
+    private Thread thread = new Thread();
 
     ArrayList<Button> buttons = new ArrayList<>();
     TesterFigur testerFigur = new TesterFigur(system.getListaGraczy().get(0));
@@ -241,6 +242,10 @@ public class FullscreenActivity extends AppCompatActivity {
         for (int i=0; i<5;i++){
             buttons.get(i).setText(Integer.toString(system.getListaGraczy().get(0).getKosci().get(i).getLiczbaOczek()));
         }
+    }
+
+    public void polaczZSerwerem(){
+
     }
 
     public void LosujKosci(View view) {
