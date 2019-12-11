@@ -101,7 +101,7 @@ public:
         }
 
         void setHash(int newHash){
-                hash=newHash;
+                hash=newHash;              
                 hash0=getCyfraFromLiczba(hash, 4);
                 hash1=getCyfraFromLiczba(hash, 3);
                 hash2=getCyfraFromLiczba(hash, 2);
@@ -111,8 +111,7 @@ public:
         int getHash(){
                 return hash;
         }
-        
-        
+ 
         int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca){
 
         int x;
