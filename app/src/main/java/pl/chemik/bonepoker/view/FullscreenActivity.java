@@ -128,6 +128,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
         zainicjujButtony();
+        polaczZSerwerem();
 
 
     }
@@ -269,7 +270,7 @@ public class FullscreenActivity extends AppCompatActivity {
         Button bLos = findViewById(R.id.buttonLosujKosci);
         TextView tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
 
-        polaczZSerwerem();
+
 
 
         if (numerTury == 1) {
