@@ -10,7 +10,7 @@ public class ServerConnect {
     private byte[] buffer = new byte[1024];
 
 
-    public void connect(){
+    public void connect() {
         InetAddress serverAddr = null;
 
         try {
@@ -23,7 +23,7 @@ public class ServerConnect {
 
     }
 
-    public void send(String toSend){
+    public void send(String toSend) {
         OutputStream outputstream = null;
         try {
             outputstream = socket.getOutputStream();
@@ -36,7 +36,7 @@ public class ServerConnect {
         out.flush();
     }
 
-    public String recv(){
+    public String recv() {
         InputStream in;
         String output = "Brak danych... :-(\n";
 
@@ -46,7 +46,28 @@ public class ServerConnect {
             int read;
             while ((read = in.read(buffer)) != -1) {
                 output = new String(buffer, 0, read);
-                System.out.print(output);
+                System.out.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return output;
+    }
+
+
+    public String recv(boolean czyWyswietlacInfoNaKonsoli) {
+        InputStream in;
+        String output = "Brak danych... :-(\n";
+
+        try {
+            in = socket.getInputStream();
+
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                output = new String(buffer, 0, read);
+                if (czyWyswietlacInfoNaKonsoli) {
+                    System.out.print("Otrzymane dane z serwera: " + output);
+                }
                 System.out.flush();
 
             }
