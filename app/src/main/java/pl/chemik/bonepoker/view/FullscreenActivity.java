@@ -8,6 +8,7 @@ import pl.chemik.bonepoker.R;
 import pl.chemik.bonepoker.logic.System;
 import pl.chemik.bonepoker.logic.TesterFigur;
 import pl.chemik.bonepoker.logic.figures.Para;
+import pl.chemik.bonepoker.network.ServerConnect;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -122,6 +123,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
         zainicjujButtony();
+
     }
 
     @Override
@@ -183,6 +185,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
 
     private System system = new System(1);
+    private ServerConnect serverConnect;
 
     ArrayList<Button> buttons = new ArrayList<>();
     TesterFigur testerFigur = new TesterFigur(system.getListaGraczy().get(0));
