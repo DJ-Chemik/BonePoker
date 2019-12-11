@@ -10,6 +10,7 @@ import pl.chemik.bonepoker.logic.figures.DuzyStrit;
 import pl.chemik.bonepoker.logic.figures.DwiePary;
 import pl.chemik.bonepoker.logic.figures.Figura;
 import pl.chemik.bonepoker.logic.figures.Full;
+import pl.chemik.bonepoker.logic.figures.HashGenerator;
 import pl.chemik.bonepoker.logic.figures.Kareta;
 import pl.chemik.bonepoker.logic.figures.MalyStrit;
 import pl.chemik.bonepoker.logic.figures.Nic;
@@ -21,6 +22,7 @@ public class TesterFigur {
 
     private Gracz gracz;
     private ArrayList<Kosc> kosci = new ArrayList<>();
+    private HashGenerator hashGenerator = new HashGenerator();
 
     public TesterFigur(Gracz gracz) {
         this.gracz = gracz;
@@ -31,49 +33,194 @@ public class TesterFigur {
     public Figura znajdzFigury(){
         posortujKosci();
         if (sprawdzCzyToPoker()==true){
+            hashGenerator.setHash1(8);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaPokera());
             return new Poker();
         }else if (sprawdzCzyToFull()==true){ //Full Wcześniej wyszukiwany niż kareta, bo algorytm na karetę znajduje też fulla
+            hashGenerator.setHash1(6);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaFulla());
             return new Full();
         }else if (sprawdzCzyToKareta()==true){
+            hashGenerator.setHash1(7);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaKarety());
             return new Kareta();
         }else if (sprawdzCzyToDuzyStrit()==true){
+            hashGenerator.setHash1(5);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaDuzegoStrita());
             return new DuzyStrit();
         }else if (sprawdzCzyToMalyStrit()==true){
+            hashGenerator.setHash1(4);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaMalegoStrita());
             return new MalyStrit();
         }else if (sprawdzCzyToTrojka()==true){
+            hashGenerator.setHash1(3);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaTrojki());
             return new Trojka();
         }else if (sprawdzCzyToDwiePary()==true){
+            hashGenerator.setHash1(2);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaDwochPar());
             return new DwiePary();
         }else if (sprawdzCzyToPara()==true){
+            hashGenerator.setHash1(1);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaPary());
             return new Para();
         }else{
+            hashGenerator.setHash1(0);
+            hashGenerator.setHash2(znajdzLiczbeWiodacaNiczego());
             return new Nic();
         }
 
     }
 
-    public String znajdzFiguryIZwrócNazwe(){
+    /**
+     * Poker [1-6]
+     * @return w zależności z jakich kości składa się Poker
+     */
+    private int znajdzLiczbeWiodacaPokera(){
+        return kosci.get(0).getLiczbaOczek();
+    }
+
+    /**
+     * Kareta [1-6]
+     * @return w zależności z jakich kości składa się Kareta
+     */
+    private int znajdzLiczbeWiodacaKarety(){
+        int liczbaZKtorejSkladaSieKareta=0;
+        for (int i = 0; i < kosci.size()-1; i++) {
+            if(kosci.get(i)==kosci.get(i+1)){
+                liczbaZKtorejSkladaSieKareta = kosci.get(i).getLiczbaOczek();
+                break;
+            }
+        }
+        return liczbaZKtorejSkladaSieKareta;
+    }
+
+    /**
+     *  Full [1-6]
+     * @return w zależności z jakich kości składa się Trójka w tym Fullu
+     */
+    private int znajdzLiczbeWiodacaFulla(){
+        int liczbaZKtorejSkladaSieTrojka=0;
+        for (int i = 0; i < kosci.size()-1; i++) {
+            if(kosci.get(i)==kosci.get(i+1) && kosci.get(i+1)==kosci.get(i+2)){
+                liczbaZKtorejSkladaSieTrojka = kosci.get(i).getLiczbaOczek();
+                break;
+            }
+        }
+        return liczbaZKtorejSkladaSieTrojka;
+    }
+
+    /**
+     * Duży Strit [0]
+     * @return ---- zawsze 0
+     */
+    private int znajdzLiczbeWiodacaDuzegoStrita(){
+        return 0;
+    }
+
+    /**
+     * Mały Strit [0]
+     * @return ----  zawsze 0
+     */
+    private int znajdzLiczbeWiodacaMalegoStrita(){
+        return 0;
+    }
+
+    /**
+     * Trójka [1-6]
+     * @return w zależności z jakich kości składa się Trójka
+     */
+    private int znajdzLiczbeWiodacaTrojki(){
+        int liczbaZKtorejSkladaSieTrojka=0;
+        for (int i = 0; i < kosci.size()-1; i++) {
+            if(kosci.get(i)==kosci.get(i+1)){
+                liczbaZKtorejSkladaSieTrojka = kosci.get(i).getLiczbaOczek();
+                break;
+            }
+        }
+        return liczbaZKtorejSkladaSieTrojka;
+    }
+
+    /**
+     * Dwie Pary [2-12]
+     * @return jedna para daje liczbe [1-6] i druga tez. Później sumujemy i suma jest wynikiem
+     */
+    private int znajdzLiczbeWiodacaDwochPar(){
+        int liczbaZKtorejSkladaSiePara1=0;
+        int liczbaZKtorejSkladaSiePara2=0;
+        for (int i = 0; i < kosci.size()-1; i++) {
+            if(kosci.get(i)==kosci.get(i+1) && liczbaZKtorejSkladaSiePara1==0){
+                liczbaZKtorejSkladaSiePara1 = kosci.get(i).getLiczbaOczek();
+            }
+            if(kosci.get(i)==kosci.get(i+1) && liczbaZKtorejSkladaSiePara1!=0){
+                liczbaZKtorejSkladaSiePara1 = kosci.get(i).getLiczbaOczek();
+            }
+        }
+        return liczbaZKtorejSkladaSiePara1+liczbaZKtorejSkladaSiePara2;
+    }
+
+    /**
+     * Para [1-6]
+     * @return w zależności z jakich liczb składa się Para
+     */
+    private int znajdzLiczbeWiodacaPary(){
+        int liczbaZKtorejSkladaSiePara=0;
+        for (int i = 0; i < kosci.size()-1; i++) {
+            if(kosci.get(i)==kosci.get(i+1)){
+                liczbaZKtorejSkladaSiePara = kosci.get(i).getLiczbaOczek();
+                break;
+            }
+        }
+        return liczbaZKtorejSkladaSiePara;
+    }
+
+    /**
+     * Nic [5-30]
+     * @return suma wszystkich oczek
+     */
+    private int znajdzLiczbeWiodacaNiczego(){
+        int suma=0;
+        for (Kosc k: kosci) {
+            suma+=k.getLiczbaOczek();
+        }
+        return suma;
+    }
+
+    public String znajdzFiguryIZwrocNazwe(){
         posortujKosci();
         if (sprawdzCzyToPoker()==true){
+            hashGenerator.setHash1(8);
             return "Poker";
         }else if (sprawdzCzyToFull()==true){ //Full Wcześniej wyszukiwany niż kareta, bo algorytm na karetę znajduje też fulla
+            hashGenerator.setHash1(6);
             return "Full";
         }else if (sprawdzCzyToKareta()==true){
+            hashGenerator.setHash1(7);
             return "Kareta";
         }else if (sprawdzCzyToDuzyStrit()==true){
+            hashGenerator.setHash1(5);
             return "Duży Strit";
         }else if (sprawdzCzyToMalyStrit()==true){
+            hashGenerator.setHash1(4);
             return "Mały Strit";
         }else if (sprawdzCzyToTrojka()==true){
+            hashGenerator.setHash1(3);
             return "Trójka";
         }else if (sprawdzCzyToDwiePary()==true){
+            hashGenerator.setHash1(2);
             return "Dwie Pary";
         }else if (sprawdzCzyToPara()==true){
+            hashGenerator.setHash1(1);
             return "Para";
         }else{
+            hashGenerator.setHash1(0);
             return "Nic :(";
         }
-    };
+    }
+
+    public HashGenerator getHashGenerator() {
+        return hashGenerator;
+    }
 
     private void posortujKosci(){
         Collections.sort(kosci);

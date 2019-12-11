@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import pl.chemik.bonepoker.R;
 import pl.chemik.bonepoker.logic.SystemGry;
 import pl.chemik.bonepoker.logic.TesterFigur;
+import pl.chemik.bonepoker.logic.figures.HashGenerator;
 import pl.chemik.bonepoker.network.ServerConnect;
 
 import android.graphics.Color;
@@ -17,13 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -192,8 +186,6 @@ public class FullscreenActivity extends AppCompatActivity {
 
 
     private SystemGry systemGry = new SystemGry(1);
-
-
     ArrayList<Button> buttons = new ArrayList<>();
     TesterFigur testerFigur = new TesterFigur(systemGry.getListaGraczy().get(0));
 
@@ -270,13 +262,11 @@ public class FullscreenActivity extends AppCompatActivity {
         Button bLos = findViewById(R.id.buttonLosujKosci);
         TextView tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
 
-
-
-
         if (numerTury == 1) {
             systemGry.getListaGraczy().get(0).losujWszystkieKosci();
             bLos.setText("Wymień zaznaczone niżej kości");
-            tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrócNazwe());
+            String nazwaFigury = testerFigur.znajdzFiguryIZwrocNazwe();
+            tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
             tvNazwaFigury.setVisibility(View.VISIBLE);
             systemGry.getListaGraczy().get(0).setNumerTury(2);
         }
@@ -288,7 +278,7 @@ public class FullscreenActivity extends AppCompatActivity {
             for (Button b : buttons){
                 b.setBackgroundColor(Color.WHITE);
             }
-            tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrócNazwe());
+            tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());
             bLos.setVisibility(View.INVISIBLE);
             systemGry.getListaGraczy().get(0).setNumerTury(3);
 
