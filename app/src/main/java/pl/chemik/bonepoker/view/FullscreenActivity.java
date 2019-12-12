@@ -185,21 +185,19 @@ public class FullscreenActivity extends AppCompatActivity {
     /////////////////////////////////////////////////////////////////////////
 
 
-
     private SystemGry systemGry = new SystemGry(1);
     ArrayList<Button> buttons = new ArrayList<>();
     TesterFigur testerFigur = new TesterFigur(systemGry.getListaGraczy().get(0));
     HashGenerator hashGenerator = testerFigur.getHashGenerator();
-    private ServerConnect serverConnect =new ServerConnect();
+    private ServerConnect serverConnect = new ServerConnect();
 
-    private void zainicjujButtony(){
-        buttons.add((Button)findViewById(R.id.bone1));
-        buttons.add((Button)findViewById(R.id.bone2));
-        buttons.add((Button)findViewById(R.id.bone3));
-        buttons.add((Button)findViewById(R.id.bone4));
-        buttons.add((Button)findViewById(R.id.bone5));
+    private void zainicjujButtony() {
+        buttons.add((Button) findViewById(R.id.bone1));
+        buttons.add((Button) findViewById(R.id.bone2));
+        buttons.add((Button) findViewById(R.id.bone3));
+        buttons.add((Button) findViewById(R.id.bone4));
+        buttons.add((Button) findViewById(R.id.bone5));
     }
-
 
 
     /**
@@ -207,15 +205,15 @@ public class FullscreenActivity extends AppCompatActivity {
      *
      * @param numer - wartość od 1 do 5
      */
-    private void zaznaczKoscDoWymiany(Integer numer){
+    private void zaznaczKoscDoWymiany(Integer numer) {
         if (!systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany().contains(numer)) {
-            if (systemGry.getListaGraczy().get(0).getNumerTury()==2) {
+            if (systemGry.getListaGraczy().get(0).getNumerTury() == 2) {
                 systemGry.getListaGraczy().get(0).addNumerKosciDoWymiany(numer);
                 buttons.get(numer - 1).setBackgroundColor(Color.DKGRAY);
             }
 
-        }else {
-            if (systemGry.getListaGraczy().get(0).getNumerTury()==2) {
+        } else {
+            if (systemGry.getListaGraczy().get(0).getNumerTury() == 2) {
                 systemGry.getListaGraczy().get(0).removeNumerKosciDoWymiany(numer);
                 buttons.get(numer - 1).setBackgroundColor(Color.WHITE); //zamien na cos takiego: buttons.get(numer - 1).setBackground (i tam domyślny materiał)
 
@@ -223,30 +221,34 @@ public class FullscreenActivity extends AppCompatActivity {
         }
     }
 
-    public void clickButtonBone1(View view){
+    public void clickButtonBone1(View view) {
         zaznaczKoscDoWymiany(1);
     }
-    public void clickButtonBone2(View view){
+
+    public void clickButtonBone2(View view) {
         zaznaczKoscDoWymiany(2);
     }
-    public void clickButtonBone3(View view){
+
+    public void clickButtonBone3(View view) {
         zaznaczKoscDoWymiany(3);
     }
-    public void clickButtonBone4(View view){
+
+    public void clickButtonBone4(View view) {
         zaznaczKoscDoWymiany(4);
     }
-    public void clickButtonBone5(View view){
+
+    public void clickButtonBone5(View view) {
         zaznaczKoscDoWymiany(5);
     }
 
-    private void wypiszNumeryKosci(){
-        for (int i=0; i<5;i++){
+    private void wypiszNumeryKosci() {
+        for (int i = 0; i < 5; i++) {
             buttons.get(i).setText(Integer.toString(systemGry.getListaGraczy().get(0).getKosci().get(i).getLiczbaOczek()));
         }
     }
-    
+
     public void LosujKosci(View view) {
-        int numerTury= systemGry.getListaGraczy().get(0).getNumerTury();
+        int numerTury = systemGry.getListaGraczy().get(0).getNumerTury();
         Button bLos = findViewById(R.id.buttonLosujKosci);
         TextView tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
 
@@ -258,14 +260,19 @@ public class FullscreenActivity extends AppCompatActivity {
             tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
             tvNazwaFigury.setVisibility(View.VISIBLE);
             systemGry.getListaGraczy().get(0).setNumerTury(2);
+            serverConnect.send(hashGenerator.getHash());
+        } else if (numerTury == 2) {
 
-        }
-        else if (numerTury==2){
+            String s = serverConnect.recv();
+
+            System.out.println("Otrzymany hash: " + s);
+
+
             ArrayList<Integer> numeryKosci = systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany();
-            for (Integer i: numeryKosci) {
+            for (Integer i : numeryKosci) {
                 systemGry.getListaGraczy().get(0).losujKosc(i);
             }
-            for (Button b : buttons){
+            for (Button b : buttons) {
                 b.setBackgroundColor(Color.WHITE);
             }
             tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());

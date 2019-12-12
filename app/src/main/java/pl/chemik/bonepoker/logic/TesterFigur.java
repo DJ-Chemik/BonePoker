@@ -392,12 +392,9 @@ public class TesterFigur {
      */
     private int znajdzLiczbeWiodacaPary(){
         int liczbaZKtorejSkladaSiePara=0;
-        System.out.println("Size kosci: " + kosci.size());
         for (int i = 0; i < kosci.size()-1; i++) {
-            System.out.println("Kość "+ i + ": " + kosci.get(i).getLiczbaOczek());
             if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek()){
                 liczbaZKtorejSkladaSiePara = kosci.get(i).getLiczbaOczek();
-                System.out.println("Wynik: " + liczbaZKtorejSkladaSiePara);
                 break;
             }
         }
