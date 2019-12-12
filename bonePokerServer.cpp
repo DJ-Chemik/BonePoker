@@ -87,8 +87,10 @@ class Gracz{
 public:
         int hash0;
         int hash1;
-        int hash2;
-        int hash3;
+        int hash2a;
+        int hash2b;
+        int hash3a;
+        int hash3b;
         bool czy_wygral = false;
         int liczba_punktow;
 
@@ -96,16 +98,20 @@ public:
                 hash=0;
                 hash0=0;
                 hash1=0;
-                hash2=0;
-                hash3=0;        
+                hash2a=0;
+                hash2b=0;
+                hash3a=0;        
+                hash3b=0;
         }
 
         void setHash(int newHash){
                 hash=newHash;              
-                hash0=getCyfraFromLiczba(hash, 4);
-                hash1=getCyfraFromLiczba(hash, 3);
-                hash2=getCyfraFromLiczba(hash, 2);
-                hash3=getCyfraFromLiczba(hash, 1);        
+                hash0=getCyfraFromLiczba(hash, 6);
+                hash1=getCyfraFromLiczba(hash, 5);
+                hash2a=getCyfraFromLiczba(hash, 4);
+                hash2b=getCyfraFromLiczba(hash, 3);
+                hash3a=getCyfraFromLiczba(hash, 2);        
+                hash3b=getCyfraFromLiczba(hash, 1);
         }
 
         int getHash(){
@@ -114,27 +120,27 @@ public:
  
         int getCyfraFromLiczba(int liczba, int nrCyfryOdKonca){
 
-        int x;
-        if(nrCyfryOdKonca==1){
-                return liczba%10;
-        }else if(nrCyfryOdKonca==2){
-                x=(liczba%100);
-                return x/10;
-        }else if(nrCyfryOdKonca==3){
-                x=(liczba%1000);
-                return x/100;
-        }else if(nrCyfryOdKonca==4){
-                x=(liczba%10000);
-                return x/1000;
-        }else if(nrCyfryOdKonca==5){
-                x=(liczba%100000);
-                return x/10000;
-        }else if(nrCyfryOdKonca==6){
-                x=(liczba%1000000);
-                return x/100000;
-        }else{
-                return -1;
-        }
+                int x;
+                if(nrCyfryOdKonca==1){
+                        return liczba%10;
+                }else if(nrCyfryOdKonca==2){
+                        x=(liczba%100);
+                        return x/10;
+                }else if(nrCyfryOdKonca==3){
+                        x=(liczba%1000);
+                        return x/100;
+                }else if(nrCyfryOdKonca==4){
+                        x=(liczba%10000);
+                        return x/1000;
+                }else if(nrCyfryOdKonca==5){
+                        x=(liczba%100000);
+                        return x/10000;
+                }else if(nrCyfryOdKonca==6){
+                        x=(liczba%1000000);
+                        return x/100000;
+                }else{
+                        return -1;
+                }
         }
 
         /**
@@ -184,21 +190,38 @@ int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
                 return 2;
         }else
         {
-                if(gracz1.hash2>gracz2.hash2){
+                if(gracz1.hash2a>gracz2.hash2a){
                         gracz1.czy_wygral=true;
                         return 1;
-                }else if (gracz1.hash2<gracz2.hash2){
+                }else if (gracz1.hash2a<gracz2.hash2a){
                         gracz2.czy_wygral=true;
                         return 2;  
                 }else{
-                        if(gracz1.hash3>gracz2.hash3){
+                        if(gracz1.hash2b>gracz2.hash2b){
                                 gracz1.czy_wygral=true;
                                 return 1;
-                         }else if (gracz1.hash3<gracz2.hash3){
+                         }else if (gracz1.hash2b<gracz2.hash2b){
                                 gracz2.czy_wygral=true;
                                 return 2;
                         }else{
-                              return 0;  
+                                if(gracz1.hash3a>gracz2.hash3a){
+                                        gracz1.czy_wygral=true;
+                                        return 1;
+                                }else if (gracz1.hash3a<gracz2.hash3a){
+                                        gracz2.czy_wygral=true;
+                                        return 2;
+                                }else{
+                                
+                                        if(gracz1.hash3b>gracz2.hash3b){
+                                                gracz1.czy_wygral=true;
+                                                return 1;
+                                        }else if (gracz1.hash3b<gracz2.hash3b){
+                                                gracz2.czy_wygral=true;
+                                                return 2;
+                                        }else{
+                                                return 0;
+                                        }
+                                }
                         }
                 }
         }
@@ -207,6 +230,8 @@ int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
         return -1;
     }
 }
+
+
 
 int main()
 {
@@ -234,7 +259,7 @@ int main()
         gracz1.setHash(atoi(buf));
         //write(1,buf ,sizeReadData);
         cout<<gracz1.obliczWynikGracza()<<endl;
-        sendTo(cfd1, gracz1.getHash()-1111,4);
+        sendTo(cfd1, gracz1.getHash()-111111,6);
 
         //if(strncmp(buf, "123", 3)==0)
         
