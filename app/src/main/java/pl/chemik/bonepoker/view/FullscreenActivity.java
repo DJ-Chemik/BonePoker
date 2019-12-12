@@ -122,7 +122,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
         zainicjujButtony();
-        polaczZSerwerem();
+        serverConnect.connect();
 
 
     }
@@ -190,6 +190,7 @@ public class FullscreenActivity extends AppCompatActivity {
     ArrayList<Button> buttons = new ArrayList<>();
     TesterFigur testerFigur = new TesterFigur(systemGry.getListaGraczy().get(0));
     HashGenerator hashGenerator = testerFigur.getHashGenerator();
+    private ServerConnect serverConnect =new ServerConnect();
 
     private void zainicjujButtony(){
         buttons.add((Button)findViewById(R.id.bone1));
@@ -243,22 +244,7 @@ public class FullscreenActivity extends AppCompatActivity {
             buttons.get(i).setText(Integer.toString(systemGry.getListaGraczy().get(0).getKosci().get(i).getLiczbaOczek()));
         }
     }
-
-    public void polaczZSerwerem(){
-        Thread thread;
-        Runnable runnable =
-                () -> {
-                   ServerConnect serverConnect =new ServerConnect();
-                   serverConnect.connect();
-                };
-        thread=new Thread(runnable);
-        thread.setDaemon(true);
-        thread.start();
-        thread.interrupt();
-
-    }
-
-
+    
     public void LosujKosci(View view) {
         int numerTury= systemGry.getListaGraczy().get(0).getNumerTury();
         Button bLos = findViewById(R.id.buttonLosujKosci);

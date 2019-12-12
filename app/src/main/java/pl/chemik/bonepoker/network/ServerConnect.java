@@ -10,7 +10,7 @@ public class ServerConnect {
     private byte[] buffer = new byte[1024];
 
 
-    public void connect() {
+    private void preconnect() {
         InetAddress serverAddr = null;
 
         try {
@@ -21,6 +21,16 @@ public class ServerConnect {
             e.printStackTrace();
         }
 
+    }
+
+    public void connect(){
+        Thread thread;
+        Runnable runnable =
+                () -> {this.preconnect();};
+        thread=new Thread(runnable);
+        thread.setDaemon(true);
+        thread.start();
+        thread.interrupt();
     }
 
     public void send(String toSend) {
