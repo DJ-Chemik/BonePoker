@@ -185,9 +185,11 @@ public class FullscreenActivity extends AppCompatActivity {
     /////////////////////////////////////////////////////////////////////////
 
 
+
     private SystemGry systemGry = new SystemGry(1);
     ArrayList<Button> buttons = new ArrayList<>();
     TesterFigur testerFigur = new TesterFigur(systemGry.getListaGraczy().get(0));
+    HashGenerator hashGenerator = testerFigur.getHashGenerator();
 
     private void zainicjujButtony(){
         buttons.add((Button)findViewById(R.id.bone1));
@@ -266,9 +268,11 @@ public class FullscreenActivity extends AppCompatActivity {
             systemGry.getListaGraczy().get(0).losujWszystkieKosci();
             bLos.setText("Wymień zaznaczone niżej kości");
             String nazwaFigury = testerFigur.znajdzFiguryIZwrocNazwe();
+            hashGenerator.setHash0(hashGenerator.PREFIX_INFORMATION_C2S); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
             tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
             tvNazwaFigury.setVisibility(View.VISIBLE);
             systemGry.getListaGraczy().get(0).setNumerTury(2);
+
         }
         else if (numerTury==2){
             ArrayList<Integer> numeryKosci = systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany();

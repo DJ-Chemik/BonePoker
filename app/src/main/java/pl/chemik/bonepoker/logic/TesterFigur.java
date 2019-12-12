@@ -1,10 +1,7 @@
 package pl.chemik.bonepoker.logic;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 
 import pl.chemik.bonepoker.logic.figures.DuzyStrit;
 import pl.chemik.bonepoker.logic.figures.DwiePary;
@@ -34,48 +31,66 @@ public class TesterFigur {
         posortujKosci();
         if (sprawdzCzyToPoker()==true){
             hashGenerator.setHash1(8);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaPokera());
-            hashGenerator.setHash3(znajdzLiczbeWolnaPokera());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaPokera()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaPokera()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaPokera()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaPokera()%10);
             return new Poker();
         }else if (sprawdzCzyToFull()==true){ //Full Wcześniej wyszukiwany niż kareta, bo algorytm na karetę znajduje też fulla
             hashGenerator.setHash1(6);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaFulla());
-            hashGenerator.setHash3(znajdzLiczbeWolnaFulla());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaFulla()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaFulla()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaFulla()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaFulla()%10);
             return new Full();
         }else if (sprawdzCzyToKareta()==true){
             hashGenerator.setHash1(7);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaKarety());
-            hashGenerator.setHash3(znajdzLiczbeWolnaKarety());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaKarety()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaKarety()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaKarety()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaKarety()%10);
             return new Kareta();
         }else if (sprawdzCzyToDuzyStrit()==true){
             hashGenerator.setHash1(5);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaDuzegoStrita());
-            hashGenerator.setHash3(znajdzLiczbeWolnaDuzegoStrita());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaDuzegoStrita()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaDuzegoStrita()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaDuzegoStrita()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaDuzegoStrita()%10);
             return new DuzyStrit();
         }else if (sprawdzCzyToMalyStrit()==true){
             hashGenerator.setHash1(4);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaMalegoStrita());
-            hashGenerator.setHash3(znajdzLiczbeWolnaMalegoStrita());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaMalegoStrita()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaMalegoStrita()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaMalegoStrita()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaMalegoStrita()%10);
             return new MalyStrit();
         }else if (sprawdzCzyToTrojka()==true){
             hashGenerator.setHash1(3);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaTrojki());
-            hashGenerator.setHash3(znajdzLiczbeWolnaTrojki());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaTrojki()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaTrojki()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaTrojki()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaTrojki()%10);
             return new Trojka();
         }else if (sprawdzCzyToDwiePary()==true){
             hashGenerator.setHash1(2);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaDwochPar());
-            hashGenerator.setHash3(znajdzLiczbeWolnaDwochPar());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaDwochPar()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaDwochPar()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaDwochPar()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaDwochPar()%10);
             return new DwiePary();
         }else if (sprawdzCzyToPara()==true){
             hashGenerator.setHash1(1);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaPary());
-            hashGenerator.setHash3(znajdzLiczbeWolnaPary());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaPary()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaPary()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaPary()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaPary()%10);
             return new Para();
         }else{
             hashGenerator.setHash1(0);
-            hashGenerator.setHash2(znajdzLiczbeWiodacaNiczego());
-            hashGenerator.setHash3(znajdzLiczbeWolnaNiczego());
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaNiczego()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaNiczego()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaNiczego()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaNiczego()%10);
             return new Nic();
         }
 
@@ -85,30 +100,67 @@ public class TesterFigur {
         posortujKosci();
         if (sprawdzCzyToPoker()==true){
             hashGenerator.setHash1(8);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaPokera()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaPokera()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaPokera()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaPokera()%10);
             return "Poker";
         }else if (sprawdzCzyToFull()==true){ //Full Wcześniej wyszukiwany niż kareta, bo algorytm na karetę znajduje też fulla
             hashGenerator.setHash1(6);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaFulla()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaFulla()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaFulla()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaFulla()%10);
             return "Full";
         }else if (sprawdzCzyToKareta()==true){
             hashGenerator.setHash1(7);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaKarety()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaKarety()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaKarety()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaKarety()%10);
             return "Kareta";
         }else if (sprawdzCzyToDuzyStrit()==true){
             hashGenerator.setHash1(5);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaDuzegoStrita()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaDuzegoStrita()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaDuzegoStrita()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaDuzegoStrita()%10);
             return "Duży Strit";
         }else if (sprawdzCzyToMalyStrit()==true){
             hashGenerator.setHash1(4);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaMalegoStrita()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaMalegoStrita()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaMalegoStrita()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaMalegoStrita()%10);
             return "Mały Strit";
         }else if (sprawdzCzyToTrojka()==true){
             hashGenerator.setHash1(3);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaTrojki()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaTrojki()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaTrojki()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaTrojki()%10);
             return "Trójka";
         }else if (sprawdzCzyToDwiePary()==true){
             hashGenerator.setHash1(2);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaDwochPar()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaDwochPar()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaDwochPar()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaDwochPar()%10);
             return "Dwie Pary";
         }else if (sprawdzCzyToPara()==true){
             hashGenerator.setHash1(1);
+            int lw = znajdzLiczbeWiodacaPary();
+            hashGenerator.setHash2a((lw%100)/10);
+            hashGenerator.setHash2b(lw%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaPary()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaPary()%10);
             return "Para";
         }else{
             hashGenerator.setHash1(0);
+            hashGenerator.setHash2a((znajdzLiczbeWiodacaNiczego()%100)/10);
+            hashGenerator.setHash2b(znajdzLiczbeWiodacaNiczego()%10);
+            hashGenerator.setHash3a((znajdzLiczbeWolnaNiczego()%100)/10);
+            hashGenerator.setHash3b(znajdzLiczbeWolnaNiczego()%10);
             return "Nic :(";
         }
     }
@@ -172,7 +224,7 @@ public class TesterFigur {
         int liczbaZKtorejSkladaSieTrojka=0;
         int sumaWolnych=0;
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1)){
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek()){
                 liczbaZKtorejSkladaSieTrojka = kosci.get(i).getLiczbaOczek();
                 break;
             }
@@ -195,12 +247,12 @@ public class TesterFigur {
         int liczbaZKtorejSkladaSiePara2=0;
         int wolnaLiczba=0;
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1) && liczbaZKtorejSkladaSiePara1==0){
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek() && liczbaZKtorejSkladaSiePara1==0){
                 liczbaZKtorejSkladaSiePara1 = kosci.get(i).getLiczbaOczek();
                 continue;
             }
-            if(kosci.get(i)==kosci.get(i+1) && liczbaZKtorejSkladaSiePara1!=0){
-                liczbaZKtorejSkladaSiePara1 = kosci.get(i).getLiczbaOczek();
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1) .getLiczbaOczek()&& liczbaZKtorejSkladaSiePara1!=0){
+                liczbaZKtorejSkladaSiePara2 = kosci.get(i).getLiczbaOczek();
                 break;
             }
         }
@@ -222,7 +274,7 @@ public class TesterFigur {
         int liczbaZKtorejSkladaSiePara=0;
         int sumaWolnych=0;
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1)){
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek()){
                 liczbaZKtorejSkladaSiePara = kosci.get(i).getLiczbaOczek();
                 break;
             }
@@ -261,7 +313,7 @@ public class TesterFigur {
     private int znajdzLiczbeWiodacaKarety(){
         int liczbaZKtorejSkladaSieKareta=0;
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1)){
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek()){
                 liczbaZKtorejSkladaSieKareta = kosci.get(i).getLiczbaOczek();
                 break;
             }
@@ -276,7 +328,8 @@ public class TesterFigur {
     private int znajdzLiczbeWiodacaFulla(){
         int liczbaZKtorejSkladaSieTrojka=0;
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1) && kosci.get(i+1)==kosci.get(i+2)){
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek()
+               && kosci.get(i+1).getLiczbaOczek()==kosci.get(i+2).getLiczbaOczek()){
                 liczbaZKtorejSkladaSieTrojka = kosci.get(i).getLiczbaOczek();
                 break;
             }
@@ -307,7 +360,7 @@ public class TesterFigur {
     private int znajdzLiczbeWiodacaTrojki(){
         int liczbaZKtorejSkladaSieTrojka=0;
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1)){
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek()){
                 liczbaZKtorejSkladaSieTrojka = kosci.get(i).getLiczbaOczek();
                 break;
             }
@@ -323,11 +376,11 @@ public class TesterFigur {
         int liczbaZKtorejSkladaSiePara1=0;
         int liczbaZKtorejSkladaSiePara2=0;
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1) && liczbaZKtorejSkladaSiePara1==0){
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek() && liczbaZKtorejSkladaSiePara1==0){
                 liczbaZKtorejSkladaSiePara1 = kosci.get(i).getLiczbaOczek();
             }
-            if(kosci.get(i)==kosci.get(i+1) && liczbaZKtorejSkladaSiePara1!=0){
-                liczbaZKtorejSkladaSiePara1 = kosci.get(i).getLiczbaOczek();
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek() && liczbaZKtorejSkladaSiePara1!=0){
+                liczbaZKtorejSkladaSiePara2 = kosci.get(i).getLiczbaOczek();
             }
         }
         return liczbaZKtorejSkladaSiePara1+liczbaZKtorejSkladaSiePara2;
@@ -339,9 +392,12 @@ public class TesterFigur {
      */
     private int znajdzLiczbeWiodacaPary(){
         int liczbaZKtorejSkladaSiePara=0;
+        System.out.println("Size kosci: " + kosci.size());
         for (int i = 0; i < kosci.size()-1; i++) {
-            if(kosci.get(i)==kosci.get(i+1)){
+            System.out.println("Kość "+ i + ": " + kosci.get(i).getLiczbaOczek());
+            if(kosci.get(i).getLiczbaOczek()==kosci.get(i+1).getLiczbaOczek()){
                 liczbaZKtorejSkladaSiePara = kosci.get(i).getLiczbaOczek();
+                System.out.println("Wynik: " + liczbaZKtorejSkladaSiePara);
                 break;
             }
         }
