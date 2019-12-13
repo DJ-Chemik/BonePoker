@@ -8,7 +8,6 @@ public class ServerConnect {
     private String ipServer = "192.168.0.108";
     private Socket socket;
     private byte[] buffer = new byte[1024];
-    private String wynikRecv;
 
     private void preConnect() {
         InetAddress serverAddr = null;
@@ -75,7 +74,6 @@ public class ServerConnect {
             int read;
             while ((read = in.read(buffer)) != -1) {
                 output = new String(buffer, 0, read);
-                this.wynikRecv=output;
                 if (czyWyswietlacInfoNaKonsoli) {
                     System.out.print("Otrzymane dane z serwera: " + output);
                 }
@@ -91,11 +89,7 @@ public class ServerConnect {
     public String recv(){
         Thread thread;
         String[] result  = new String[1];
-                Runnable runnable = () -> {result[0] = this.preRecv(false);
-                System.out.println("Result[0]: "+ result[0]);
-            };
-            System.out.println("Result[0] poza ciałem: "+ result[0]);
-
+                Runnable runnable = () -> {result[0] = this.preRecv(false);};
 
             thread = new Thread(runnable);
             thread.setDaemon(true);
@@ -106,8 +100,7 @@ public class ServerConnect {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("wynikiRecv: "+ wynikRecv);
-        return this.wynikRecv;
+        return result[0];
     }
 
 

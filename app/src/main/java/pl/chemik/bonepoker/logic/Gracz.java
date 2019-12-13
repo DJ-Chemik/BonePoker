@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Gracz {
 
     private ArrayList<Kosc> kosci = new ArrayList<>();
-    int numerTury = 1;
     ArrayList<Integer> numeryKosciDoWymiany = new ArrayList<>();
 
     public Gracz() {
@@ -43,13 +42,6 @@ public class Gracz {
         }
     }
 
-    public int getNumerTury() {
-        return numerTury;
-    }
-
-    public void setNumerTury(int numerTury) {
-        this.numerTury = numerTury;
-    }
 
     public ArrayList<Integer> getNumeryKosciDoWymiany() {
         return numeryKosciDoWymiany;

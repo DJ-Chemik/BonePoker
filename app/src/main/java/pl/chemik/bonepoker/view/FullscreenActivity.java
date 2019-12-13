@@ -122,6 +122,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
         zainicjujButtony();
+        systemGry.setNumerTury(1);
         serverConnect.connect();
 
 
@@ -207,13 +208,13 @@ public class FullscreenActivity extends AppCompatActivity {
      */
     private void zaznaczKoscDoWymiany(Integer numer) {
         if (!systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany().contains(numer)) {
-            if (systemGry.getListaGraczy().get(0).getNumerTury() == 2) {
+            if (systemGry.getNumerTury() == 2) {
                 systemGry.getListaGraczy().get(0).addNumerKosciDoWymiany(numer);
                 buttons.get(numer - 1).setBackgroundColor(Color.DKGRAY);
             }
 
         } else {
-            if (systemGry.getListaGraczy().get(0).getNumerTury() == 2) {
+            if (systemGry.getNumerTury() == 2) {
                 systemGry.getListaGraczy().get(0).removeNumerKosciDoWymiany(numer);
                 buttons.get(numer - 1).setBackgroundColor(Color.WHITE); //zamien na cos takiego: buttons.get(numer - 1).setBackground (i tam domyślny materiał)
 
@@ -248,7 +249,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     public void LosujKosci(View view) {
-        int numerTury = systemGry.getListaGraczy().get(0).getNumerTury();
+        int numerTury = systemGry.getNumerTury();
         Button bLos = findViewById(R.id.buttonLosujKosci);
         TextView tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
 
@@ -259,7 +260,7 @@ public class FullscreenActivity extends AppCompatActivity {
             hashGenerator.setHash0(hashGenerator.PREFIX_INFORMATION_C2S); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
             tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
             tvNazwaFigury.setVisibility(View.VISIBLE);
-            systemGry.getListaGraczy().get(0).setNumerTury(2);
+            systemGry.setNumerTury(2);
             serverConnect.send(hashGenerator.getHash());
         } else if (numerTury == 2) {
 
@@ -277,7 +278,7 @@ public class FullscreenActivity extends AppCompatActivity {
             }
             tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());
             bLos.setVisibility(View.INVISIBLE);
-            systemGry.getListaGraczy().get(0).setNumerTury(3);
+            systemGry.setNumerTury(3);
 
         }
 
