@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
@@ -121,7 +122,8 @@ public class FullscreenActivity extends AppCompatActivity {
 
 
         /////////////////////////////////////////////////////////////////////////
-        zainicjujButtony();
+        zainicjujKomponentyWidoku();
+        systemGry.setNumerRundy(1);
         systemGry.setNumerTury(1);
         serverConnect.connect();
 
@@ -187,17 +189,34 @@ public class FullscreenActivity extends AppCompatActivity {
 
 
     private SystemGry systemGry = new SystemGry(1);
-    ArrayList<Button> buttons = new ArrayList<>();
     TesterFigur testerFigur = new TesterFigur(systemGry.getListaGraczy().get(0));
     HashGenerator hashGenerator = testerFigur.getHashGenerator();
     private ServerConnect serverConnect = new ServerConnect();
 
-    private void zainicjujButtony() {
+    ArrayList<Button> buttons = new ArrayList<>();
+    TextView tvRunda;
+    TextView tvTura;
+    TextView tvWynikGracza;
+    TextView tvWynikPrzeciwnika;
+    TextView tvTmpWynikGracza;
+    TextView tvTmpWynikPrzeciwnika;
+    Button bLos;
+    TextView tvNazwaFigury;
+
+    private void zainicjujKomponentyWidoku() {
         buttons.add((Button) findViewById(R.id.bone1));
         buttons.add((Button) findViewById(R.id.bone2));
         buttons.add((Button) findViewById(R.id.bone3));
         buttons.add((Button) findViewById(R.id.bone4));
         buttons.add((Button) findViewById(R.id.bone5));
+        bLos = findViewById(R.id.buttonLosujKosci);
+        tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
+        tvRunda = findViewById(R.id.tvRunda);
+        tvTura = findViewById(R.id.tvTura);
+        tvWynikGracza = findViewById(R.id.tvWynikGracza);
+        tvWynikPrzeciwnika = findViewById(R.id.tvWynikPrzeciwnika);
+        tvTmpWynikGracza = findViewById(R.id.tvTmpWynikGracza);
+        tvTmpWynikPrzeciwnika = findViewById(R.id.tvTmpWynikPrzeciwnika);
     }
 
 
@@ -250,39 +269,55 @@ public class FullscreenActivity extends AppCompatActivity {
 
     public void LosujKosci(View view) {
         int numerTury = systemGry.getNumerTury();
-        Button bLos = findViewById(R.id.buttonLosujKosci);
-        TextView tvNazwaFigury = findViewById(R.id.tvNazwaFigury);
 
         if (numerTury == 1) {
-            systemGry.getListaGraczy().get(0).losujWszystkieKosci();
-            bLos.setText("Wymień zaznaczone niżej kości");
-            String nazwaFigury = testerFigur.znajdzFiguryIZwrocNazwe();
-            hashGenerator.setHash0(hashGenerator.PREFIX_INFORMATION_C2S); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
-            tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
-            tvNazwaFigury.setVisibility(View.VISIBLE);
-            systemGry.setNumerTury(2);
-            serverConnect.send(hashGenerator.getHash());
+            rozegrajTure1();
+
         } else if (numerTury == 2) {
-
-            String s = serverConnect.recv();
-
-            System.out.println("Otrzymany hash: " + s);
-
-
-            ArrayList<Integer> numeryKosci = systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany();
-            for (Integer i : numeryKosci) {
-                systemGry.getListaGraczy().get(0).losujKosc(i);
-            }
-            for (Button b : buttons) {
-                b.setBackgroundColor(Color.WHITE);
-            }
-            tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());
-            bLos.setVisibility(View.INVISIBLE);
-            systemGry.setNumerTury(3);
-
+            rozegrajTure2();
         }
 
         wypiszNumeryKosci();
+
+    }
+
+    private void rozegrajTure1() {
+        systemGry.getListaGraczy().get(0).losujWszystkieKosci();
+        bLos.setText("Wymień zaznaczone niżej kości");
+        String nazwaFigury = testerFigur.znajdzFiguryIZwrocNazwe();
+        hashGenerator.setHash0(hashGenerator.PREFIX_INFORMATION_C2S); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
+        tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
+        tvNazwaFigury.setVisibility(View.VISIBLE);
+        tvTura.setText("Tura "+ 2 + "/2");
+        systemGry.setNumerTury(2);
+        serverConnect.send(hashGenerator.getHash());
+    }
+
+    private void rozegrajTure2() {
+        String s = serverConnect.recv(false);
+
+        System.out.println("Otrzymany hash: " + s);
+
+
+        ArrayList<Integer> numeryKosci = systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany();
+        for (Integer i : numeryKosci) {
+            systemGry.getListaGraczy().get(0).losujKosc(i);
+        }
+        for (Button b : buttons) {
+            b.setBackgroundColor(Color.WHITE);
+        }
+        tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());
+        bLos.setVisibility(View.INVISIBLE);
+        systemGry.setNumerRundy(systemGry.getNumerRundy()+1);
+        systemGry.setNumerTury(999);
+        tvRunda.setText("Runda "+ systemGry.getNumerRundy() + "/5");
+        String infinitySymbol = null;
+        try {
+            infinitySymbol = new String(String.valueOf(Character.toString('\u221E')).getBytes("UTF-8"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        tvTura.setText("Tura "+ infinitySymbol + "/2");
 
     }
 

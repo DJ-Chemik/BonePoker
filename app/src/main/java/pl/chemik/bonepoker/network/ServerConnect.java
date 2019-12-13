@@ -86,10 +86,10 @@ public class ServerConnect {
         return output;
     }
 
-    public String recv(){
+    public String recv(boolean czyWyswietlacInfoNaKonsoli){
         Thread thread;
         String[] result  = new String[1];
-                Runnable runnable = () -> {result[0] = this.preRecv(false);};
+                Runnable runnable = () -> {result[0] = this.preRecv(czyWyswietlacInfoNaKonsoli);};
 
             thread = new Thread(runnable);
             thread.setDaemon(true);

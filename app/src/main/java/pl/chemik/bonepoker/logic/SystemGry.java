@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class SystemGry {
     private int liczbaGraczy = 2;
     private ArrayList<Gracz> listaGraczy = new ArrayList<>();
-    private int numerTury;
+    private int numerRundy = 0;
+    private int numerTury = 0;
 
     public SystemGry() {
         dodajGraczy();
-        numerTury=0;
     }
 
     public SystemGry(int liczbaGraczy) {
@@ -33,6 +33,14 @@ public class SystemGry {
         for (int i=0; i < liczbaGraczy; i++) {
             listaGraczy.add(new Gracz());
         }
+    }
+
+    public int getNumerRundy() {
+        return numerRundy;
+    }
+
+    public void setNumerRundy(int numerRundy) {
+        this.numerRundy = numerRundy;
     }
 
     public int getNumerTury() {
