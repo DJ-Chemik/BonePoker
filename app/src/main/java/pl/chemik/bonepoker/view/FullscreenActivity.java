@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import pl.chemik.bonepoker.R;
+import pl.chemik.bonepoker.gameObjects.GameObject;
 import pl.chemik.bonepoker.logic.SystemGry;
 import pl.chemik.bonepoker.logic.TesterFigur;
 import pl.chemik.bonepoker.logic.figures.HashGenerator;
@@ -123,9 +124,6 @@ public class FullscreenActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
         zainicjujKomponentyWidoku();
-
-        serverConnect.connect();
-
         systemGry.setNumerTury(1);
         systemGry.setNumerRundy(1);
 
@@ -198,7 +196,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private SystemGry systemGry = new SystemGry(1);
     TesterFigur testerFigur = new TesterFigur(systemGry.getListaGraczy().get(0));
     HashGenerator hashGenerator = testerFigur.getHashGenerator();
-    private ServerConnect serverConnect = new ServerConnect();
+    private ServerConnect serverConnect = GameObject.getServerConnect();
 
     ArrayList<Button> buttons = new ArrayList<>();
     TextView tvRunda;

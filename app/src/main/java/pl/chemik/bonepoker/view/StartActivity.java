@@ -5,12 +5,18 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import pl.chemik.bonepoker.R;
+import pl.chemik.bonepoker.gameObjects.GameObject;
+import pl.chemik.bonepoker.network.ServerConnect;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -110,6 +116,10 @@ public class StartActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+        buttonConnect = findViewById(R.id.buttonConnect);
+        etIP = findViewById(R.id.etIP);
+        etPort = findViewById(R.id.etPort);
+
     }
 
     @Override
@@ -163,5 +173,20 @@ public class StartActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    private Button buttonConnect;
+    private EditText etIP;
+    private EditText etPort;
+
+
+
+    public void initConnection(View view){
+        GameObject.getServerConnect().connect();
+        Intent i = new Intent();
+        i.setClass(StartActivity.this, FullscreenActivity.class);
+        startActivity(i);
+        finish();
+
     }
 }
