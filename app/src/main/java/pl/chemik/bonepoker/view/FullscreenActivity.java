@@ -125,14 +125,16 @@ public class FullscreenActivity extends AppCompatActivity {
         zainicjujKomponentyWidoku();
 
         serverConnect.connect();
-        if (serverConnect.recvSignalToStart()){
-            systemGry.setNumerTury(1);
-            systemGry.setNumerRundy(1);
-        }
 
+        systemGry.setNumerTury(1);
+        systemGry.setNumerRundy(1);
+
+        tvRunda.setText("Runda " + 1 + "/5");
+        tvTura.setText("Tura " + 1 + "/2");
 
 
     }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -142,6 +144,7 @@ public class FullscreenActivity extends AppCompatActivity {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+
     }
 
     private void toggle() {
@@ -296,7 +299,7 @@ public class FullscreenActivity extends AppCompatActivity {
         serverConnect.send(hashGenerator.getHash());
         String otrzymanyHash = serverConnect.recv(false);
         tvTmpWynikPrzeciwnika.setText(otrzymanyHash);
-        tvTura.setText("Tura "+ 2 + "/2");
+        tvTura.setText("Tura " + 2 + "/2");
         systemGry.setNumerTury(2);
     }
 
@@ -311,16 +314,16 @@ public class FullscreenActivity extends AppCompatActivity {
         }
         tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());
         bLos.setVisibility(View.INVISIBLE);
-        systemGry.setNumerRundy(systemGry.getNumerRundy()+1);
+        systemGry.setNumerRundy(systemGry.getNumerRundy() + 1);
         systemGry.setNumerTury(999);
-        tvRunda.setText("Runda "+ systemGry.getNumerRundy() + "/5");
+        tvRunda.setText("Runda " + systemGry.getNumerRundy() + "/5");
         String infinitySymbol = null;
         try {
             infinitySymbol = new String(String.valueOf(Character.toString('\u221E')).getBytes("UTF-8"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            infinitySymbol="999";
+            infinitySymbol = "999";
         }
-        tvTura.setText("Tura "+ infinitySymbol + "/2");
+        tvTura.setText("Tura " + infinitySymbol + "/2");
 
     }
 

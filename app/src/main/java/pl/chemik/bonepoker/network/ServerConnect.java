@@ -106,6 +106,7 @@ public class ServerConnect {
     public boolean recvSignalToStart(){
         String stringHash = recv(false);
         int hash = Integer.parseInt(stringHash);
+        System.out.println(hash);
         if (hash/100000 == 2){
             return true;
         }else{
