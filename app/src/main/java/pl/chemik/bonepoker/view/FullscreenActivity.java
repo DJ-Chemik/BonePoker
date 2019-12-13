@@ -123,9 +123,13 @@ public class FullscreenActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
         zainicjujKomponentyWidoku();
-        systemGry.setNumerRundy(1);
-        systemGry.setNumerTury(1);
+
         serverConnect.connect();
+        if (serverConnect.recvSignalToStart()){
+            systemGry.setNumerTury(1);
+            systemGry.setNumerRundy(1);
+        }
+
 
 
     }
@@ -288,16 +292,15 @@ public class FullscreenActivity extends AppCompatActivity {
         hashGenerator.setHash0(hashGenerator.PREFIX_INFORMATION_C2S); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
         tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
         tvNazwaFigury.setVisibility(View.VISIBLE);
+
+        serverConnect.send(hashGenerator.getHash());
+        String otrzymanyHash = serverConnect.recv(false);
+        tvTmpWynikPrzeciwnika.setText(otrzymanyHash);
         tvTura.setText("Tura "+ 2 + "/2");
         systemGry.setNumerTury(2);
-        serverConnect.send(hashGenerator.getHash());
     }
 
     private void rozegrajTure2() {
-        String s = serverConnect.recv(false);
-
-        System.out.println("Otrzymany hash: " + s);
-
 
         ArrayList<Integer> numeryKosci = systemGry.getListaGraczy().get(0).getNumeryKosciDoWymiany();
         for (Integer i : numeryKosci) {
@@ -315,7 +318,7 @@ public class FullscreenActivity extends AppCompatActivity {
         try {
             infinitySymbol = new String(String.valueOf(Character.toString('\u221E')).getBytes("UTF-8"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            infinitySymbol="999";
         }
         tvTura.setText("Tura "+ infinitySymbol + "/2");
 

@@ -103,6 +103,15 @@ public class ServerConnect {
         return result[0];
     }
 
+    public boolean recvSignalToStart(){
+        String stringHash = recv(false);
+        int hash = Integer.parseInt(stringHash);
+        if (hash/100000 == 2){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public int getPortServer() {
         return portServer;
