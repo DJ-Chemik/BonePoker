@@ -235,7 +235,7 @@ int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
 
 int main()
 {
-    int fd, cfd1, cfd2, on=1;
+    int fd, on=1;
     int port = 1234;
     struct sockaddr_in server_addr, client1_addr;
     socklen_t length;
@@ -247,25 +247,101 @@ int main()
     bind(fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
     listen(fd, 10);
     Gracz gracz1, gracz2;
+
+    fd_set rmask;
+    FD_ZERO(&rmask);
+
+    fd_set wmask;
+    FD_ZERO(&wmask);
+
+    int fdmax = fd;
     
     while(true)
     {
+
+        int sizeReadData;
         char buf[BUFFER_SIZE];
-        length=sizeof(client1_addr);
-        cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
-        cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
-        int sizeReadData=read(cfd1, buf, BUFFER_SIZE);
+        int cfd1, cfd2;
+
+        FD_SET(fd,&rmask);
+        static struct timeval timeout;
+        timeout.tv_sec = 5 * 60;
+        timeout.tv_usec = 0;
+        int rc = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
+        if (rc == 0)
+        {
+            printf("timed out\n");
+            continue;
+        }
+
+        int fda=rc;
+        if (FD_ISSET(fd, &rmask))
+        {
+                fda-=1;
+                length=sizeof(client1_addr);
+                cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
+                cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
+                FD_SET(cfd1, &rmask);
+
+                if (cfd1>fdmax)
+                {
+                        fdmax=cfd1;
+                }         
+        }
+        for (int i = fd+1; i <= fdmax && fda>0; i++)
+        {
+                if (FD_ISSET(i, &rmask))
+                {
+                        fda-=1;
+                        sizeReadData=read(cfd1, buf, BUFFER_SIZE);
+                        gracz1.setHash(atoi(buf));
+                        cout<<"Otrzymany hash: "<<gracz1.getHash()<<endl;
+                        FD_CLR(i, &rmask);
+                        FD_SET(i, &wmask);
+
+                }
+
+                if (FD_ISSET(i, &wmask))
+                {
+                        fda-=1;
+                        sendTo(cfd1, 200000,6);
+                        close(i);
+                        FD_CLR(i, &wmask);
+
+                        if (i == fdmax)
+                        {
+                          while (fdmax > fd && !FD_ISSET(fdmax, &wmask))
+                          {
+                            fdmax -= 1;
+                          }
+                        }
+                }
+                
+                
+        }
         
-        gracz1.setHash(atoi(buf));
-        //write(1,buf ,sizeReadData);
-        cout<<gracz1.obliczWynikGracza()<<endl;
-        sendTo(cfd1, gracz1.getHash()-111111,6);
+        
+        //length=sizeof(client1_addr);
+        //cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
+        //cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
+        
+        //sizeReadData=read(cfd1, buf, BUFFER_SIZE);
+        //gracz1.setHash(atoi(buf));
+        //cout<<"Otrzymany hash: "<<gracz1.getHash()<<endl;
+        
+        //sendTo(cfd1, 200000,6);
+        
+        //sizeReadData=read(cfd1, buf, BUFFER_SIZE);
+        //gracz1.setHash(atoi(buf));
+        //cout<<"Otrzymany hash: "<<gracz1.getHash()<<endl;
+        
+        //sendTo(cfd1, gracz1.getHash(),6);
 
         //if(strncmp(buf, "123", 3)==0)
         
 
-        close(cfd1);
-        memset(buf, 0, sizeof(buf));
+        //close(cfd1);
+        //memset(buf, 0, sizeof(buf));
 
     }
     close(fd);

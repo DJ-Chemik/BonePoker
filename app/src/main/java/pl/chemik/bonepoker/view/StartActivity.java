@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.sql.SQLOutput;
+
 import pl.chemik.bonepoker.R;
 import pl.chemik.bonepoker.gameObjects.GameObject;
 import pl.chemik.bonepoker.network.ServerConnect;
@@ -182,11 +184,23 @@ public class StartActivity extends AppCompatActivity {
 
 
     public void initConnection(View view){
+        GameObject.getServerConnect().setIpServer(etIP.getText().toString());
+        GameObject.getServerConnect().setPortServer(Integer.parseInt(etPort.getText().toString()));
         GameObject.getServerConnect().connect();
-        Intent i = new Intent();
-        i.setClass(StartActivity.this, FullscreenActivity.class);
-        startActivity(i);
-        finish();
+        GameObject.getServerConnect().send(912345);
+
+        if (GameObject.getServerConnect().recvSignalToStart()) {
+            System.out.println("Odebrano sygnał startu");
+            Intent i = new Intent();
+            i.setClass(StartActivity.this, FullscreenActivity.class);
+            startActivity(i);
+            finish();
+        }else{
+            System.out.println("Błąd serwera");
+        }
+
+
+
 
     }
 }

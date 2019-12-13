@@ -294,6 +294,7 @@ public class FullscreenActivity extends AppCompatActivity {
         tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
         tvNazwaFigury.setVisibility(View.VISIBLE);
 
+        //serverConnect.connect();
         serverConnect.send(hashGenerator.getHash());
         String otrzymanyHash = serverConnect.recv(false);
         tvTmpWynikPrzeciwnika.setText(otrzymanyHash);

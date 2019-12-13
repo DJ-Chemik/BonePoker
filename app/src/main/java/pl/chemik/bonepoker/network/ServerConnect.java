@@ -30,6 +30,11 @@ public class ServerConnect {
         thread.setDaemon(true);
         thread.start();
         thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void preSend(String toSend) {
@@ -53,6 +58,11 @@ public class ServerConnect {
         thread.setDaemon(true);
         thread.start();
         thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void send(String hash){
@@ -94,7 +104,7 @@ public class ServerConnect {
             thread = new Thread(runnable);
             thread.setDaemon(true);
             thread.start();
-            thread.interrupt();
+            //thread.interrupt();
         try {
             thread.join();
         } catch (InterruptedException e) {
@@ -113,6 +123,8 @@ public class ServerConnect {
             return false;
         }
     }
+
+
 
     public int getPortServer() {
         return portServer;
