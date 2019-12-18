@@ -158,6 +158,7 @@ public:
                 return punkty;                
         }
 
+
 };
 
 
@@ -237,7 +238,7 @@ int main()
 {
     int fd, on=1;
     int port = 1234;
-    struct sockaddr_in server_addr, client1_addr;
+    struct sockaddr_in server_addr, client1_addr, client2_addr;
     socklen_t length;
     fd=socket(PF_INET, SOCK_STREAM, 0);
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
@@ -263,9 +264,11 @@ int main()
     static struct timeval timeout;
     timeout.tv_sec = 5 * 60;
     timeout.tv_usec = 0;
+
+    cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
+    cfd2=accept(fd, (struct sockaddr*) &client2_addr, &length);
     while(true)
     {
-
 
         int rc = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
         if (rc == 0)
@@ -279,14 +282,20 @@ int main()
         {
                 fda-=1;
                 length=sizeof(client1_addr);
-                cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
-                cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
+                
+                cout<<"Connection from [1]: "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
+                cout<<"Connection from [2]: "<<inet_ntoa(client2_addr.sin_addr)<<":"<<client2_addr.sin_port<<endl;
                 FD_SET(cfd1, &rmask);
+                FD_SET(cfd2, &rmask);
 
                 if (cfd1>fdmax)
                 {
                         fdmax=cfd1;
-                }         
+                }
+                if (cfd2>fdmax)
+                {
+                        fdmax=cfd2;
+                }            
         }
         for (int i = fd+1; i <= fdmax && fda>0; i++)
         {
@@ -318,27 +327,7 @@ int main()
                 }
                 
                 
-        }
-        
-        
-        //length=sizeof(client1_addr);
-        //cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
-        //cout<<"Connection from "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
-        
-        //sizeReadData=read(cfd1, buf, BUFFER_SIZE);
-        //gracz1.setHash(atoi(buf));
-        //cout<<"Otrzymany hash: "<<gracz1.getHash()<<endl;
-        
-        //sendTo(cfd1, 200000,6);
-        
-        //sizeReadData=read(cfd1, buf, BUFFER_SIZE);
-        //gracz1.setHash(atoi(buf));
-        //cout<<"Otrzymany hash: "<<gracz1.getHash()<<endl;
-        
-        //sendTo(cfd1, gracz1.getHash(),6);
-
-        //if(strncmp(buf, "123", 3)==0)
-        
+        }       
 
         //close(cfd1);
         //memset(buf, 0, sizeof(buf));
