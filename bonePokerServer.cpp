@@ -256,17 +256,17 @@ int main()
 
     int fdmax = fd;
     
+    int sizeReadData;
+    char buf[BUFFER_SIZE];
+    int cfd1, cfd2;
+    FD_SET(fd,&rmask);
+    static struct timeval timeout;
+    timeout.tv_sec = 5 * 60;
+    timeout.tv_usec = 0;
     while(true)
     {
 
-        int sizeReadData;
-        char buf[BUFFER_SIZE];
-        int cfd1, cfd2;
 
-        FD_SET(fd,&rmask);
-        static struct timeval timeout;
-        timeout.tv_sec = 5 * 60;
-        timeout.tv_usec = 0;
         int rc = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
         if (rc == 0)
         {
