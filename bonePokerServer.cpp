@@ -256,33 +256,36 @@ int main()
     FD_ZERO(&wmask);
 
     int fdmax = fd;
-    
+
     int sizeReadData;
-    char buf[BUFFER_SIZE];
-    int cfd1, cfd2;
+    
     FD_SET(fd,&rmask);
     static struct timeval timeout;
     timeout.tv_sec = 5 * 60;
     timeout.tv_usec = 0;
+    
 
-    cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
-    cfd2=accept(fd, (struct sockaddr*) &client2_addr, &length);
+    
     while(true)
     {
+        
+        char buf[BUFFER_SIZE];
+        int cfd1, cfd2;
 
-        int rc = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
-        if (rc == 0)
+        int wynikSelect = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
+        if (wynikSelect == 0)
         {
             printf("timed out\n");
             continue;
         }
 
-        int fda=rc;
+        int ileZostaloDeskryptorowDoObslugi=wynikSelect;
         if (FD_ISSET(fd, &rmask))
         {
-                fda-=1;
+                //ileZostaloDeskryptorowDoObslugi-=1;
                 length=sizeof(client1_addr);
-                
+                cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
+                cfd2=accept(fd, (struct sockaddr*) &client2_addr, &length);
                 cout<<"Connection from [1]: "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
                 cout<<"Connection from [2]: "<<inet_ntoa(client2_addr.sin_addr)<<":"<<client2_addr.sin_port<<endl;
                 FD_SET(cfd1, &rmask);
@@ -297,12 +300,12 @@ int main()
                         fdmax=cfd2;
                 }            
         }
-        for (int i = fd+1; i <= fdmax && fda>0; i++)
+        for (int i = fd+1; i <= fdmax && ileZostaloDeskryptorowDoObslugi>0; i++)
         {
                 if (FD_ISSET(i, &rmask))
                 {
-                        fda-=1;
-                        sizeReadData=read(cfd1, buf, BUFFER_SIZE);
+                        ileZostaloDeskryptorowDoObslugi-=1;
+                        sizeReadData=read(i, buf, BUFFER_SIZE);
                         gracz1.setHash(atoi(buf));
                         cout<<"Otrzymany hash: "<<gracz1.getHash()<<endl;
                         FD_CLR(i, &rmask);
@@ -312,8 +315,8 @@ int main()
 
                 if (FD_ISSET(i, &wmask))
                 {
-                        fda-=1;
-                        sendTo(cfd1, 200000,6);
+                        ileZostaloDeskryptorowDoObslugi-=1;
+                        sendTo(i, 200000,6);
                         close(i);
                         FD_CLR(i, &wmask);
 
