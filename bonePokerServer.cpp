@@ -327,7 +327,7 @@ int main()
         }
 
         int ileZostaloDeskryptorowDoObslugi=wynikSelect;
-
+        bool czyCosWyslac = false;
         for (int i = fd+1; i <= fdmax && ileZostaloDeskryptorowDoObslugi>0; i++)
         {
                 if (FD_ISSET(i, &rmask))
@@ -345,13 +345,14 @@ int main()
                                 cout<<"Otrzymany hash: [2]"<<gracz2.getHash()<<endl;
                         }
                         
-                        
+                        czyCosWyslac=true;
                         //FD_CLR(i, &rmask);
                         //FD_SET(i, &wmask);
 
                 }
 
-                /*if (FD_ISSET(i, &wmask))
+                //if (FD_ISSET(i, &wmask))
+                if(czyCosWyslac)
                 {
                         ileZostaloDeskryptorowDoObslugi-=1;
                         
@@ -366,7 +367,7 @@ int main()
                                 sendTo(i, hashToSend,6);
                                 cout<<"Wysłany hash [2]: "<<hashToSend<<endl;
                         }
-
+                        czyCosWyslac=false;
                         //close(i);
                         //FD_CLR(i, &wmask);
 
@@ -377,11 +378,7 @@ int main()
                             //fdmax -= 1;
                           //}
                         //}
-                }*/
-                
-                
-                
-
+                }     
         }       
 
         iteracje--;
@@ -392,7 +389,6 @@ int main()
                 close(cfd2);
         }
         //memset(buf, 0, sizeof(buf));
-
     }
     close(fd);
     
