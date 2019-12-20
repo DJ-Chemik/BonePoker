@@ -263,23 +263,19 @@ int main()
     static struct timeval timeout;
     timeout.tv_sec = 5 * 60;
     timeout.tv_usec = 0;
-    
+    char buf[BUFFER_SIZE];
+    int cfd1, cfd2;
 
-    
-    while(true)
+    bool czyCzekacNaPolaczenieKlientow == true;
+    while (czyCzekacNaPolaczenieKlientow)
     {
-        
-        char buf[BUFFER_SIZE];
-        int cfd1, cfd2;
-
         int wynikSelect = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
         if (wynikSelect == 0)
         {
-            printf("timed out\n");
+            printf("Gracze się nie podłączyli :<\n");
             continue;
         }
 
-        int ileZostaloDeskryptorowDoObslugi=wynikSelect;
         if (FD_ISSET(fd, &rmask))
         {
                 //ileZostaloDeskryptorowDoObslugi-=1;
@@ -290,6 +286,7 @@ int main()
                 cout<<"Connection from [2]: "<<inet_ntoa(client2_addr.sin_addr)<<":"<<client2_addr.sin_port<<endl;
                 FD_SET(cfd1, &rmask);
                 FD_SET(cfd2, &rmask);
+                czyCzekacNaPolaczenieKlientow==false;
 
                 if (cfd1>fdmax)
                 {
@@ -300,6 +297,24 @@ int main()
                         fdmax=cfd2;
                 }            
         }
+
+    }
+    
+
+    bool czyGraTrwa = true;
+    int iteracje = 10;
+    while(czyGraTrwa)
+    {
+        
+        int wynikSelect = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
+        if (wynikSelect == 0)
+        {
+            printf("timed out\n");
+            continue;
+        }
+
+        int ileZostaloDeskryptorowDoObslugi=wynikSelect;
+
         for (int i = fd+1; i <= fdmax && ileZostaloDeskryptorowDoObslugi>0; i++)
         {
                 if (FD_ISSET(i, &rmask))
@@ -339,7 +354,7 @@ int main()
                                 cout<<"Wysłany hash [2]: "<<hashToSend<<endl;
                         }
 
-                        close(i);
+                        //close(i);
                         FD_CLR(i, &wmask);
 
                         if (i == fdmax)
@@ -352,9 +367,17 @@ int main()
                 }
                 
                 
+                
+
         }       
 
-        //close(cfd1);
+        iteracje--;
+        if (iteracje==0)
+        {
+                czyGraTrwa==false;
+                close(cfd1);
+                close(cfd2);
+        }
         //memset(buf, 0, sizeof(buf));
 
     }
