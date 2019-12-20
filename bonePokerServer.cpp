@@ -306,8 +306,18 @@ int main()
                 {
                         ileZostaloDeskryptorowDoObslugi-=1;
                         sizeReadData=read(i, buf, BUFFER_SIZE);
-                        gracz1.setHash(atoi(buf));
-                        cout<<"Otrzymany hash: "<<gracz1.getHash()<<endl;
+                        if(i==cfd1)
+                        {
+                                gracz1.setHash(atoi(buf));
+                                cout<<"Otrzymany hash [1]: "<<gracz1.getHash()<<endl;
+                        }
+                        if(i==cfd2)
+                        {
+                                gracz2.setHash(atoi(buf));
+                                cout<<"Otrzymany hash: [2]"<<gracz2.getHash()<<endl;
+                        }
+                        
+                        
                         FD_CLR(i, &rmask);
                         FD_SET(i, &wmask);
 
@@ -316,7 +326,19 @@ int main()
                 if (FD_ISSET(i, &wmask))
                 {
                         ileZostaloDeskryptorowDoObslugi-=1;
-                        sendTo(i, 200000,6);
+                        
+                        int hashToSend = 200000;
+                        if(i==cfd1)
+                        {
+                                sendTo(i, hashToSend,6);
+                                cout<<"Wysłany hash [1]: "<<hashToSend<<endl;
+                        }
+                        if(i==cfd2)
+                        {
+                                sendTo(i, hashToSend,6);
+                                cout<<"Wysłany hash [2]: "<<hashToSend<<endl;
+                        }
+
                         close(i);
                         FD_CLR(i, &wmask);
 
