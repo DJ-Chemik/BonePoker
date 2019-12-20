@@ -266,7 +266,8 @@ int main()
     char buf[BUFFER_SIZE];
     int cfd1, cfd2;
 
-    bool czyCzekacNaPolaczenieKlientow == true;
+    bool czyCzekacNaPolaczenieKlientow = true;
+    int nrKlienta=1;
     while (czyCzekacNaPolaczenieKlientow)
     {
         int wynikSelect = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
@@ -280,24 +281,36 @@ int main()
         {
                 //ileZostaloDeskryptorowDoObslugi-=1;
                 length=sizeof(client1_addr);
-                cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
-                cfd2=accept(fd, (struct sockaddr*) &client2_addr, &length);
-                cout<<"Connection from [1]: "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
-                cout<<"Connection from [2]: "<<inet_ntoa(client2_addr.sin_addr)<<":"<<client2_addr.sin_port<<endl;
-                FD_SET(cfd1, &rmask);
-                FD_SET(cfd2, &rmask);
-                czyCzekacNaPolaczenieKlientow==false;
+                int startHash = 200000;
 
-                if (cfd1>fdmax)
+                if (nrKlienta==1)
                 {
-                        fdmax=cfd1;
+                        cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);        
+                        cout<<"Connection from [1]: "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
+                        if (cfd1>fdmax)
+                        {
+                                fdmax=cfd1;
+                        }
+                        nrKlienta=2;
                 }
-                if (cfd2>fdmax)
+                if (nrKlienta==2)
                 {
-                        fdmax=cfd2;
-                }            
+                        cfd2=accept(fd, (struct sockaddr*) &client2_addr, &length);        
+                        cout<<"Connection from [2]: "<<inet_ntoa(client2_addr.sin_addr)<<":"<<client2_addr.sin_port<<endl;
+                        FD_SET(cfd1, &wmask);
+                        FD_SET(cfd2, &wmask);
+                        
+                        sendTo(cfd1, startHash,6);
+                        sendTo(cfd2, startHash,6);
+                        FD_SET(cfd1, &rmask);
+                        FD_SET(cfd2, &rmask);
+                        czyCzekacNaPolaczenieKlientow=false;
+                        if (cfd2>fdmax)
+                        {
+                                fdmax=cfd2;
+                        }
+                }                                  
         }
-
     }
     
 
@@ -333,12 +346,12 @@ int main()
                         }
                         
                         
-                        FD_CLR(i, &rmask);
-                        FD_SET(i, &wmask);
+                        //FD_CLR(i, &rmask);
+                        //FD_SET(i, &wmask);
 
                 }
 
-                if (FD_ISSET(i, &wmask))
+                /*if (FD_ISSET(i, &wmask))
                 {
                         ileZostaloDeskryptorowDoObslugi-=1;
                         
@@ -355,16 +368,16 @@ int main()
                         }
 
                         //close(i);
-                        FD_CLR(i, &wmask);
+                        //FD_CLR(i, &wmask);
 
-                        if (i == fdmax)
-                        {
-                          while (fdmax > fd && !FD_ISSET(fdmax, &wmask))
-                          {
-                            fdmax -= 1;
-                          }
-                        }
-                }
+                        //if (i == fdmax)
+                        //{
+                          //while (fdmax > fd && !FD_ISSET(fdmax, &wmask))
+                          //{
+                            //fdmax -= 1;
+                          //}
+                        //}
+                }*/
                 
                 
                 

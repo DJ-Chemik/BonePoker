@@ -187,7 +187,7 @@ public class StartActivity extends AppCompatActivity {
         GameObject.getServerConnect().setIpServer(etIP.getText().toString());
         GameObject.getServerConnect().setPortServer(Integer.parseInt(etPort.getText().toString()));
         GameObject.getServerConnect().connect();
-        GameObject.getServerConnect().send(912345);
+        //GameObject.getServerConnect().send(912345);
 
         if (GameObject.getServerConnect().recvSignalToStart()) {
             System.out.println("Odebrano sygnał startu");
