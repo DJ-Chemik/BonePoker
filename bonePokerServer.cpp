@@ -18,8 +18,28 @@
 
 #define MAX_CONNECTIONS 32
 #define BUFFER_SIZE 4096
+
+
 #define HASH_SIGNAL_FROM_PLAYER_RESULT 1 //pierwsza cyfra w Hashu od gracza informująca że przesyła on wynik
-#define HASH_SIGNAL_FROM_PLAYER_CONFIGURE 9 //pierwsza cyfra w Hashu od gracza informująca że przesyła on nie wynik a dane konfiguracyjne
+//#define HASH_SIGNAL_FROM_PLAYER_CONFIGURE 9 //pierwsza cyfra w Hashu od gracza informująca że przesyła on nie wynik a dane konfiguracyjne
+
+//Connection
+#define HASH_CONNECT 911111 //klient pyta czy może dołaczyć
+#define HASH_C1_IS_STILL_WAIT 910011 //klient 1 pyta czy nadal czekać
+#define HASH_C2_IS_STILL_WAIT 920022 //klient 2 pyta czy nadal czekać
+#define HASH_PLAYER_NUMBER_1 910000 //serwer wysyła do klienta info że jest graczem pierwszym
+#define HASH_PLAYER_NUMBER_2 920000 //serwer wysyła do klienta info że jest graczem drugim
+#define HASH_WAIT_FOR_OPPONENT 990000 //serwer wysyła informacje żeby gracz 1 czekał na podłączenie gracza 2
+#define HASH_OPPONENT_IS_READY 991111 //serwer wysyła informacje do gracza 1 że gracz 2 sie juz podłączył do gry
+
+//Game
+#define HASH0_PLAYER_1_RESULT 1 //tak zaczyna się hash gdy klient 1 lub serwer do niego przysyła wyniki
+#define HASH0_PLAYER_2_RESULT 2 //tak zaczyna się hash gdy klient 2 lub serwer do niego przysyła wyniki
+
+//End
+#define HASH_END_GAME 999999 //Zakończenie gry
+
+
 
 using namespace std;
 
@@ -180,8 +200,8 @@ char* sendTo(int deskryptor, int hashToSend, int length){
 //1 - gdy wygrywa gracz 1, 2 - gdy wygrywa gracz 2, 0 - gdy remis, -1 gdy błąd
 int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
   
-    if(gracz1.hash0==HASH_SIGNAL_FROM_PLAYER_RESULT && 
-       gracz2.hash0==HASH_SIGNAL_FROM_PLAYER_RESULT)
+    if(gracz1.hash0==HASH0_PLAYER_1_RESULT && 
+       gracz2.hash0==HASH0_PLAYER_2_RESULT)
        {
         if(gracz1.hash1>gracz2.hash1){
                 gracz1.czy_wygral=true;
