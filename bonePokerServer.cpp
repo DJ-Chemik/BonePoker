@@ -123,6 +123,11 @@ public:
                 hash3a=0;        
                 hash3b=0;
         }
+        void resetGracz(){
+                setHash(0);
+                czy_wygral=0;
+                liczba_punktow=0;
+        }
 
         void setHash(int newHash){
                 hash=newHash;              
@@ -189,6 +194,15 @@ class Game{
 public:
         Gracz gracz1;
         Gracz gracz2;
+
+        void resetGame(){
+                numerEtapu=0;
+                iloscGraczyPodlaczonych=0;
+                iloscGraczyKtorzyPrzeslaliWyniki=0;
+                gracz1.resetGracz();
+                gracz2.resetGracz();
+        }
+
         void incrementEtap(){
                 if (numerEtapu<7)
                 {
@@ -296,11 +310,8 @@ char* sendTo(int deskryptor, int hashToSend, int length){
     return charToSend;
 }
 
-
-
-int analyzeReceivedHash(int receivedHash, Game game){
-        if (game.getNumerEtapu()==0){
-                if (receivedHash==HASH_CONNECT)
+int analyzeConnectionPart(int receivedHash, Game game){
+        if (receivedHash==HASH_CONNECT)
                 {
                         if (game.getLiczbaGraczy()==0)
                         {
@@ -326,19 +337,22 @@ int analyzeReceivedHash(int receivedHash, Game game){
                                 game.incrementEtap();
                                 return HASH_OPPONENT_IS_READY;
                         }
-                }                    
+                }
+        return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
+}
 
-        }else if (game.getNumerEtapu()==1){
-                int whichPlayer = game.gracz1.hash0;
+int analyzeGamingPart(int receivedHash, Game game){
+        int whichPlayer = game.gracz1.hash0;
 
                 if (receivedHash==HASH_C1_IS_STILL_WAIT){
                         if (game.getLiczbaPrzeslanychWynikow()==1)
-                        {
-                                
+                        {       
                                 return HASH_WAIT_FOR_OPPONENT;
                         }
                         if (game.getLiczbaPrzeslanychWynikow()==2)
                         {
+                                game.gracz1.czy_wygral=false;
+                                game.gracz2.czy_wygral=false;
                                 //zwraca wynik
                                 return whichPlayer*100000+game.gracz1.liczba_punktow*100+game.gracz2.liczba_punktow;
                         }
@@ -349,9 +363,11 @@ int analyzeReceivedHash(int receivedHash, Game game){
                         }
                         if (game.getLiczbaPrzeslanychWynikow()==2)
                         {
+                                game.gracz1.czy_wygral=false;
+                                game.gracz2.czy_wygral=false;
+                                game.incrementEtap();
                                 //zwraca wynik
-                                return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;
-                                
+                                return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;       
                         }
                 }else{
                         if (game.getLiczbaPrzeslanychWynikow()==0)
@@ -390,25 +406,40 @@ int analyzeReceivedHash(int receivedHash, Game game){
                                         return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;
                                 }
                         }            
-                } 
-                
-        }else if (game.getNumerEtapu()==2){
-                /* code */
-        }else if (game.getNumerEtapu()==3){
-                /* code */
-        }else if (game.getNumerEtapu()==4){
-                /* code */
-        }else if (game.getNumerEtapu()==5){
-                /* code */
-        }else if (game.getNumerEtapu()==6){
-                /* code */
-        }else if (game.getNumerEtapu()==7){
-                /* code */
-        }else{
-                return -1; //ERROR
+                }
+        return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
+}
+
+int analyzeEndingPart(int receivedHash, Game game){
+        if (receivedHash==HASH_END_GAME)
+        {
+                game.resetGame();
         }
-        
-        
+        return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie  
+}
+
+int analyzeReceivedHash(int receivedHash, Game game){
+        if (game.getNumerEtapu()==0){
+                return analyzeConnectionPart(receivedHash, game);             
+
+        }else if (game.getNumerEtapu()==1){
+                return analyzeGamingPart(receivedHash,game);
+
+        }else if (game.getNumerEtapu()==2){
+                return analyzeGamingPart(receivedHash,game);
+        }else if (game.getNumerEtapu()==3){
+                return analyzeGamingPart(receivedHash,game);
+        }else if (game.getNumerEtapu()==4){
+                return analyzeGamingPart(receivedHash,game);
+        }else if (game.getNumerEtapu()==5){
+                return analyzeGamingPart(receivedHash,game);
+        }else if (game.getNumerEtapu()==6){
+                return analyzeGamingPart(receivedHash,game);
+        }else if (game.getNumerEtapu()==7){
+                return analyzeEndingPart(receivedHash,game);
+        }
+             
+        return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
 }
 
 
