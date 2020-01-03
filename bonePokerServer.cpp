@@ -181,6 +181,107 @@ public:
 
 };
 
+class Game{
+        int numerEtapu = 0;        //0 -podłączanie, 1-6 rozgrywka, 7 - zakończenie
+        int iloscGraczyPodlaczonych=0;
+        int iloscGraczyKtorzyPrzeslaliWyniki=0;
+        
+public:
+        Gracz gracz1;
+        Gracz gracz2;
+        void incrementEtap(){
+                if (numerEtapu<7)
+                {
+                        numerEtapu++;
+                }else
+                {
+                        numerEtapu=0;
+                }
+                
+                
+        }
+        int setNumerEtapu(int numer){
+                if (numer>=0 && numer<=7)
+                {
+                        numerEtapu=numer;
+                        return 0;
+                }else{
+                        return -1;
+                }
+                
+        }
+        int getNumerEtapu(){
+                return numerEtapu;
+        }
+        int getLiczbaGraczy(){
+                return iloscGraczyPodlaczonych;
+        }
+        void setLiczbaGraczy(int liczba){
+                iloscGraczyPodlaczonych=liczba;
+        }
+        int getLiczbaPrzeslanychWynikow(){
+                return iloscGraczyKtorzyPrzeslaliWyniki;
+        }
+        void setLiczbaOtrzymanychWynikow(int liczba){
+                iloscGraczyKtorzyPrzeslaliWyniki=liczba;
+        }
+
+        //1 - gdy wygrywa gracz 1, 2 - gdy wygrywa gracz 2, 0 - gdy remis, -1 gdy błąd
+        int porownajWynikiGraczy(){
+        
+                if(gracz1.hash0==HASH0_PLAYER_1_RESULT && 
+                gracz2.hash0==HASH0_PLAYER_2_RESULT)
+                {
+                        if(gracz1.hash1>gracz2.hash1){
+                                gracz1.czy_wygral=true;
+                                return 1;
+                        }else if (gracz1.hash1<gracz2.hash1){
+                                gracz2.czy_wygral=true;
+                                return 2;
+                        }else
+                        {
+                                if(gracz1.hash2a>gracz2.hash2a){
+                                        gracz1.czy_wygral=true;
+                                        return 1;
+                                }else if (gracz1.hash2a<gracz2.hash2a){
+                                        gracz2.czy_wygral=true;
+                                        return 2;  
+                                }else{
+                                        if(gracz1.hash2b>gracz2.hash2b){
+                                                gracz1.czy_wygral=true;
+                                                return 1;
+                                        }else if (gracz1.hash2b<gracz2.hash2b){
+                                                gracz2.czy_wygral=true;
+                                                return 2;
+                                        }else{
+                                                if(gracz1.hash3a>gracz2.hash3a){
+                                                        gracz1.czy_wygral=true;
+                                                        return 1;
+                                                }else if (gracz1.hash3a<gracz2.hash3a){
+                                                        gracz2.czy_wygral=true;
+                                                        return 2;
+                                                }else{
+                                                
+                                                        if(gracz1.hash3b>gracz2.hash3b){
+                                                                gracz1.czy_wygral=true;
+                                                                return 1;
+                                                        }else if (gracz1.hash3b<gracz2.hash3b){
+                                                                gracz2.czy_wygral=true;
+                                                                return 2;
+                                                        }else{
+                                                                return 0;
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                
+                }else{
+                        return -1;
+                }
+        }
+        
+};
 
 
 char* sendTo(int deskryptor, int hashToSend, int length){
@@ -197,68 +298,125 @@ char* sendTo(int deskryptor, int hashToSend, int length){
 
 
 
-//1 - gdy wygrywa gracz 1, 2 - gdy wygrywa gracz 2, 0 - gdy remis, -1 gdy błąd
-int porownajWynikiGraczy(Gracz gracz1, Gracz gracz2){
-  
-    if(gracz1.hash0==HASH0_PLAYER_1_RESULT && 
-       gracz2.hash0==HASH0_PLAYER_2_RESULT)
-       {
-        if(gracz1.hash1>gracz2.hash1){
-                gracz1.czy_wygral=true;
-                return 1;
-        }else if (gracz1.hash1<gracz2.hash1){
-                gracz2.czy_wygral=true;
-                return 2;
-        }else
-        {
-                if(gracz1.hash2a>gracz2.hash2a){
-                        gracz1.czy_wygral=true;
-                        return 1;
-                }else if (gracz1.hash2a<gracz2.hash2a){
-                        gracz2.czy_wygral=true;
-                        return 2;  
-                }else{
-                        if(gracz1.hash2b>gracz2.hash2b){
-                                gracz1.czy_wygral=true;
-                                return 1;
-                         }else if (gracz1.hash2b<gracz2.hash2b){
-                                gracz2.czy_wygral=true;
-                                return 2;
-                        }else{
-                                if(gracz1.hash3a>gracz2.hash3a){
-                                        gracz1.czy_wygral=true;
-                                        return 1;
-                                }else if (gracz1.hash3a<gracz2.hash3a){
-                                        gracz2.czy_wygral=true;
-                                        return 2;
-                                }else{
-                                
-                                        if(gracz1.hash3b>gracz2.hash3b){
-                                                gracz1.czy_wygral=true;
-                                                return 1;
-                                        }else if (gracz1.hash3b<gracz2.hash3b){
-                                                gracz2.czy_wygral=true;
-                                                return 2;
-                                        }else{
-                                                return 0;
-                                        }
-                                }
+int analyzeReceivedHash(int receivedHash, Game game){
+        if (game.getNumerEtapu()==0){
+                if (receivedHash==HASH_CONNECT)
+                {
+                        if (game.getLiczbaGraczy()==0)
+                        {
+                                game.setLiczbaGraczy(1);
+                                return HASH_PLAYER_NUMBER_1;
                         }
+                        if (game.getLiczbaGraczy()==1)
+                        {
+                                game.setLiczbaGraczy(2);
+                                return HASH_PLAYER_NUMBER_2;
+                        }
+                        
                 }
+                if (receivedHash==HASH_C1_IS_STILL_WAIT)
+                {
+                        if (game.getLiczbaGraczy()==1)
+                        {
+                                
+                                return HASH_WAIT_FOR_OPPONENT;
+                        }
+                        if (game.getLiczbaGraczy()==2)
+                        {
+                                game.incrementEtap();
+                                return HASH_OPPONENT_IS_READY;
+                        }
+                }                    
+
+        }else if (game.getNumerEtapu()==1){
+                int whichPlayer = game.gracz1.hash0;
+
+                if (receivedHash==HASH_C1_IS_STILL_WAIT){
+                        if (game.getLiczbaPrzeslanychWynikow()==1)
+                        {
+                                
+                                return HASH_WAIT_FOR_OPPONENT;
+                        }
+                        if (game.getLiczbaPrzeslanychWynikow()==2)
+                        {
+                                //zwraca wynik
+                                return whichPlayer*100000+game.gracz1.liczba_punktow*100+game.gracz2.liczba_punktow;
+                        }
+                }else if(receivedHash==HASH_C2_IS_STILL_WAIT){
+                        if (game.getLiczbaPrzeslanychWynikow()==1)
+                        {        
+                                return HASH_WAIT_FOR_OPPONENT;
+                        }
+                        if (game.getLiczbaPrzeslanychWynikow()==2)
+                        {
+                                //zwraca wynik
+                                return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;
+                                
+                        }
+                }else{
+                        if (game.getLiczbaPrzeslanychWynikow()==0)
+                        {        
+                                if (whichPlayer==1)
+                                {
+                                        game.gracz1.setHash(receivedHash);
+                                }
+                                if (whichPlayer==2)
+                                {
+                                        game.gracz2.setHash(receivedHash);
+                                }
+                                game.setLiczbaOtrzymanychWynikow(1);
+                                return HASH_WAIT_FOR_OPPONENT;
+                        }
+                        if (game.getLiczbaPrzeslanychWynikow()==1)
+                        {
+                                if (whichPlayer==1)
+                                {
+                                        game.gracz1.setHash(receivedHash);
+                                }
+                                if (whichPlayer==2)
+                                {
+                                        game.gracz2.setHash(receivedHash);
+                                }
+                                game.porownajWynikiGraczy();
+                                game.gracz1.obliczWynikGracza();
+                                game.gracz2.obliczWynikGracza();
+                                game.setLiczbaOtrzymanychWynikow(2);
+                                if (whichPlayer==1)
+                                {
+                                        return whichPlayer*100000+game.gracz1.liczba_punktow*100+game.gracz2.liczba_punktow;
+                                }
+                                if (whichPlayer==2)
+                                {
+                                        return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;
+                                }
+                        }            
+                } 
+                
+        }else if (game.getNumerEtapu()==2){
+                /* code */
+        }else if (game.getNumerEtapu()==3){
+                /* code */
+        }else if (game.getNumerEtapu()==4){
+                /* code */
+        }else if (game.getNumerEtapu()==5){
+                /* code */
+        }else if (game.getNumerEtapu()==6){
+                /* code */
+        }else if (game.getNumerEtapu()==7){
+                /* code */
+        }else{
+                return -1; //ERROR
         }
-      
-    }else{
-        return -1;
-    }
+        
+        
 }
 
 
-
 int main()
-{
+{      
     int fd, on=1;
     int port = 1234;
-    struct sockaddr_in server_addr, client1_addr, client2_addr;
+    struct sockaddr_in server_addr, client1_addr;
     socklen_t length;
     fd=socket(PF_INET, SOCK_STREAM, 0);
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
@@ -267,7 +425,7 @@ int main()
     server_addr.sin_port=htons(port);
     bind(fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
     listen(fd, 10);
-    Gracz gracz1, gracz2;
+    Game game;
 
     fd_set rmask;
     FD_ZERO(&rmask);
@@ -276,7 +434,6 @@ int main()
     FD_ZERO(&wmask);
 
     int fdmax = fd;
-
     int sizeReadData;
     
     FD_SET(fd,&rmask);
@@ -284,13 +441,12 @@ int main()
     timeout.tv_sec = 5 * 60;
     timeout.tv_usec = 0;
     
-
-    
     while(true)
     {
         
         char buf[BUFFER_SIZE];
-        int cfd1, cfd2;
+        int cfd1;
+        int respondHash;
 
         int wynikSelect = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
         if (wynikSelect == 0)
@@ -305,20 +461,14 @@ int main()
                 //ileZostaloDeskryptorowDoObslugi-=1;
                 length=sizeof(client1_addr);
                 cfd1=accept(fd, (struct sockaddr*) &client1_addr, &length);
-                cfd2=accept(fd, (struct sockaddr*) &client2_addr, &length);
-                cout<<"Connection from [1]: "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl;
-                cout<<"Connection from [2]: "<<inet_ntoa(client2_addr.sin_addr)<<":"<<client2_addr.sin_port<<endl;
+                cout<<"Connection from : "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl; 
                 FD_SET(cfd1, &rmask);
-                FD_SET(cfd2, &rmask);
 
                 if (cfd1>fdmax)
                 {
                         fdmax=cfd1;
                 }
-                if (cfd2>fdmax)
-                {
-                        fdmax=cfd2;
-                }            
+                  
         }
         for (int i = fd+1; i <= fdmax && ileZostaloDeskryptorowDoObslugi>0; i++)
         {
@@ -328,35 +478,27 @@ int main()
                         sizeReadData=read(i, buf, BUFFER_SIZE);
                         if(i==cfd1)
                         {
-                                gracz1.setHash(atoi(buf));
-                                cout<<"Otrzymany hash [1]: "<<gracz1.getHash()<<endl;
-                        }
-                        if(i==cfd2)
-                        {
-                                gracz2.setHash(atoi(buf));
-                                cout<<"Otrzymany hash: [2]"<<gracz2.getHash()<<endl;
-                        }
-                        
+                                //game.gracz1.setHash(atoi(buf));
+                                cout<<"Otrzymany hash :"<<game.gracz1.getHash()<<endl;
+                                int receivedHash=atoi(buf);
+                                cout<<"Otrzymany hash :"<<receivedHash<<endl;
+                                respondHash=analyzeReceivedHash(receivedHash,game);
+                                
+                        }                       
                         
                         FD_CLR(i, &rmask);
                         FD_SET(i, &wmask);
-
                 }
 
                 if (FD_ISSET(i, &wmask))
                 {
                         ileZostaloDeskryptorowDoObslugi-=1;
                         
-                        int hashToSend = 200000;
+                        int hashToSend = respondHash;
                         if(i==cfd1)
                         {
                                 sendTo(i, hashToSend,6);
-                                cout<<"Wysłany hash [1]: "<<hashToSend<<endl;
-                        }
-                        if(i==cfd2)
-                        {
-                                sendTo(i, hashToSend,6);
-                                cout<<"Wysłany hash [2]: "<<hashToSend<<endl;
+                                cout<<"Wysłany hash: "<<hashToSend<<endl;
                         }
 
                         close(i);
@@ -369,9 +511,7 @@ int main()
                             fdmax -= 1;
                           }
                         }
-                }
-                
-                
+                }      
         }       
 
         //close(cfd1);
