@@ -25,12 +25,12 @@ public class GameObject {
         GameObject.serverConnect = serverConnect;
     }
 
-    public int addPunktyGracza(int ileDodac){
+    public static int addPunktyGracza(int ileDodac){
         punktyGracza+=ileDodac;
         return punktyGracza;
     }
 
-    public int addPunktyPrzeciwnika(int ileDodac){
+    public static int addPunktyPrzeciwnika(int ileDodac){
         punktyPrzeciwnika+=ileDodac;
         return punktyPrzeciwnika;
     }

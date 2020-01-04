@@ -430,6 +430,13 @@ int analyzeEndingPart(int receivedHash){
         return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie  
 }
 
+void displayEtapNumberToConsole(){
+        
+        cout<<"-------------------------------------------------------"<<endl;
+        cout<<"[ETAP NUMER: >> "<<game.getNumerEtapu()<<endl;
+        cout<<"-------------------------------------------------------"<<endl;
+}
+
 int analyzeReceivedHash(int receivedHash){
         if (game.getNumerEtapu()==0){
                 return analyzeConnectionPart(receivedHash);             
@@ -484,7 +491,7 @@ int main()
     
     while(true)
     {
-        
+        displayEtapNumberToConsole();
         char buf[BUFFER_SIZE];
         int cfd1;
         int respondHash;

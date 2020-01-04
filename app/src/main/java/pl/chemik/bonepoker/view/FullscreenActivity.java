@@ -297,12 +297,14 @@ public class FullscreenActivity extends AppCompatActivity {
         if (GameObject.getMojNumerGracza()==2){
             hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_2_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
         }
+
+        systemGry.setNumerTury(2);
         tvTura.setText("Tura " + 2 + "/2");
         tvNazwaFigury.setVisibility(View.VISIBLE);
 
         zaktualizujWyniki();
 
-        systemGry.setNumerTury(2);
+
     }
 
     private void rozegrajTure2() {
@@ -325,15 +327,19 @@ public class FullscreenActivity extends AppCompatActivity {
         systemGry.setNumerRundy(systemGry.getNumerRundy() + 1);
         systemGry.setNumerTury(999);
         tvRunda.setText("Runda " + systemGry.getNumerRundy() + "/5");
-        String infinitySymbol = null;
+
+        /*String infinitySymbol;
         try {
             infinitySymbol = new String(String.valueOf(Character.toString('\u221E')).getBytes("UTF-8"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             infinitySymbol = "999";
         }
-        tvTura.setText("Tura " + infinitySymbol + "/2");
-
+        tvTura.setText("Tura " + infinitySymbol + "/2");*/
+        systemGry.setNumerTury(1);
+        tvTura.setText("Tura " + 1 + "/2");
         zaktualizujWyniki();
+        GameObject.addPunktyGracza(hashGenerator.getHash2());
+        GameObject.addPunktyPrzeciwnika(hashGenerator.getHash3());
 
     }
 
