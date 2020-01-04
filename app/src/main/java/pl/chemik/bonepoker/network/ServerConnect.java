@@ -35,7 +35,29 @@ public class ServerConnect {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private void preClose(){
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void close(){
+        Thread thread;
+        Runnable runnable =
+                () -> {this.preClose();};
+        thread=new Thread(runnable);
+        thread.setDaemon(true);
+        thread.start();
+        thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void connect(){
@@ -129,19 +151,40 @@ public class ServerConnect {
         return result[0];
     }
 
+    private int shouldStillWainting(){
+        GameObject.getServerConnect().connect();
+        if (GameObject.getMojNumerGracza()==1){
+            GameObject.getServerConnect().send(ServerConnect.HASH_C1_IS_STILL_WAIT);
+        }else if (GameObject.getMojNumerGracza()==2){
+            GameObject.getServerConnect().send(ServerConnect.HASH_C2_IS_STILL_WAIT);
+        }
+        String stringHash = GameObject.getServerConnect().recv(false);
+        return Integer.parseInt(stringHash);
+    }
+
     public boolean recvSignalToStart(){
         String stringHash = recv(false);
         int hash = Integer.parseInt(stringHash);
-        System.out.println(hash);
+        //System.out.println(hash);
+        int sekunda = 1000;
+        int ileSekundCzekac = 3*sekunda;
         while(true){
             if (hash == HASH_PLAYER_NUMBER_1){
                 GameObject.setMojNumerGracza(1);
-                return false;
+                hash = shouldStillWainting();
+                continue;
             }else if (hash == HASH_PLAYER_NUMBER_2){
                 GameObject.setMojNumerGracza(2);
                 return true;
             }else if (hash == HASH_WAIT_FOR_OPPONENT){
-                return false;
+                try {
+                    Thread.sleep(ileSekundCzekac);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                hash = shouldStillWainting();
+                continue;
             }else if (hash == HASH_OPPONENT_IS_READY){
                 return true;
             }else{

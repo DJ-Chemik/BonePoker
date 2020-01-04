@@ -199,7 +199,8 @@ public class StartActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }else{
-                System.out.println("Oczekiwanie na przeciwnika");
+                System.out.println("Błąd połączenia z serwerem");
+
             }
         }
 

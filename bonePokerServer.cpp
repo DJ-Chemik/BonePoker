@@ -297,6 +297,7 @@ public:
         
 };
 
+Game game;
 
 char* sendTo(int deskryptor, int hashToSend, int length){
     stringstream ss;
@@ -310,7 +311,7 @@ char* sendTo(int deskryptor, int hashToSend, int length){
     return charToSend;
 }
 
-int analyzeConnectionPart(int receivedHash, Game game){
+int analyzeConnectionPart(int receivedHash){
         if (receivedHash==HASH_CONNECT)
                 {
                         if (game.getLiczbaGraczy()==0)
@@ -341,7 +342,7 @@ int analyzeConnectionPart(int receivedHash, Game game){
         return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
 }
 
-int analyzeGamingPart(int receivedHash, Game game){
+int analyzeGamingPart(int receivedHash){
         int whichPlayer = game.gracz1.hash0;
 
                 if (receivedHash==HASH_C1_IS_STILL_WAIT){
@@ -410,7 +411,7 @@ int analyzeGamingPart(int receivedHash, Game game){
         return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
 }
 
-int analyzeEndingPart(int receivedHash, Game game){
+int analyzeEndingPart(int receivedHash){
         if (receivedHash==HASH_END_GAME)
         {
                 game.resetGame();
@@ -418,23 +419,23 @@ int analyzeEndingPart(int receivedHash, Game game){
         return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie  
 }
 
-int analyzeReceivedHash(int receivedHash, Game game){
+int analyzeReceivedHash(int receivedHash){
         if (game.getNumerEtapu()==0){
-                return analyzeConnectionPart(receivedHash, game);             
+                return analyzeConnectionPart(receivedHash);             
         }else if (game.getNumerEtapu()==1){
-                return analyzeGamingPart(receivedHash,game);
+                return analyzeGamingPart(receivedHash);
         }else if (game.getNumerEtapu()==2){
-                return analyzeGamingPart(receivedHash,game);
+                return analyzeGamingPart(receivedHash);
         }else if (game.getNumerEtapu()==3){
-                return analyzeGamingPart(receivedHash,game);
+                return analyzeGamingPart(receivedHash);
         }else if (game.getNumerEtapu()==4){
-                return analyzeGamingPart(receivedHash,game);
+                return analyzeGamingPart(receivedHash);
         }else if (game.getNumerEtapu()==5){
-                return analyzeGamingPart(receivedHash,game);
+                return analyzeGamingPart(receivedHash);
         }else if (game.getNumerEtapu()==6){
-                return analyzeGamingPart(receivedHash,game);
+                return analyzeGamingPart(receivedHash);
         }else if (game.getNumerEtapu()==7){
-                return analyzeEndingPart(receivedHash,game);
+                return analyzeEndingPart(receivedHash);
         }
              
         return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
@@ -454,7 +455,7 @@ int main()
     server_addr.sin_port=htons(port);
     bind(fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
     listen(fd, 10);
-    Game game;
+    
 
     fd_set rmask;
     FD_ZERO(&rmask);
@@ -508,10 +509,10 @@ int main()
                         if(i==cfd1)
                         {
                                 //game.gracz1.setHash(atoi(buf));
-                                cout<<"Otrzymany hash :"<<game.gracz1.getHash()<<endl;
+                                //cout<<"Otrzymany hash :"<<game.gracz1.getHash()<<endl;
                                 int receivedHash=atoi(buf);
                                 cout<<"Otrzymany hash :"<<receivedHash<<endl;
-                                respondHash=analyzeReceivedHash(receivedHash,game);
+                                respondHash=analyzeReceivedHash(receivedHash);
                                 
                         }                       
                         
