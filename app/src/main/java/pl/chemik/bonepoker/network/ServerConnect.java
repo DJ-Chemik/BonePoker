@@ -195,22 +195,26 @@ public class ServerConnect {
     }
 
     public String recvResult() {
-        //String stringHash = recv(false);
-        //int hash = Integer.parseInt(stringHash);
-        int hash;
+        String stringHash = recv(false);
+        int hash = Integer.parseInt(stringHash);
+
+        if (hash%100000/10000!=9){
+            return stringHash;
+        }
+
         while (true) {
             hash = shouldStillWainting();
             if (hash == HASH_WAIT_FOR_OPPONENT) {
                 continue;
-            } else {
+            }else if(hash==-1) {
+                System.out.println("BLEDNY OTZRYMANY HASH");
+                continue;
+            }else{
                 return String.valueOf(hash);
             }
 
         }
     }
-
-
-
 
         public int getPortServer() {
         return portServer;

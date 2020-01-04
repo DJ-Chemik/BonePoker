@@ -343,7 +343,14 @@ int analyzeConnectionPart(int receivedHash){
 }
 
 int analyzeGamingPart(int receivedHash){
-        int whichPlayer = game.gracz1.getCyfraFromLiczba(receivedHash, 6);
+        int firstNumber = game.gracz1.getCyfraFromLiczba(receivedHash, 6);
+        int whichPlayer;
+        if (firstNumber==9)
+        {
+                whichPlayer = game.gracz1.getCyfraFromLiczba(receivedHash, 5);
+        }else{
+                whichPlayer = firstNumber;
+        }        
 
         if (receivedHash==HASH_C1_IS_STILL_WAIT){
                 if (game.getLiczbaPrzeslanychWynikow()==1)
@@ -354,6 +361,8 @@ int analyzeGamingPart(int receivedHash){
                 {
                         game.gracz1.czy_wygral=false;
                         game.gracz2.czy_wygral=false;
+                        game.incrementEtap();
+                        game.setLiczbaOtrzymanychWynikow(0);
                         //zwraca wynik
                         return whichPlayer*100000+game.gracz1.liczba_punktow*100+game.gracz2.liczba_punktow;
                 }
@@ -367,6 +376,7 @@ int analyzeGamingPart(int receivedHash){
                         game.gracz1.czy_wygral=false;
                         game.gracz2.czy_wygral=false;
                         game.incrementEtap();
+                        game.setLiczbaOtrzymanychWynikow(0);
                         //zwraca wynik
                         return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;       
                 }
@@ -407,7 +417,8 @@ int analyzeGamingPart(int receivedHash){
                                 return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;
                         }
                 }            
-        }        
+        }
+        cout<<"BŁĄD W GAMING PART, [ETAP]: "<<game.getNumerEtapu();        
         return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
 }
 
@@ -464,7 +475,7 @@ int main()
     FD_ZERO(&wmask);
 
     int fdmax = fd;
-    int sizeReadData;
+    //int sizeReadData;
     
     FD_SET(fd,&rmask);
     static struct timeval timeout;
@@ -505,7 +516,8 @@ int main()
                 if (FD_ISSET(i, &rmask))
                 {
                         ileZostaloDeskryptorowDoObslugi-=1;
-                        sizeReadData=read(i, buf, BUFFER_SIZE);
+                        //sizeReadData=
+                        read(i, buf, BUFFER_SIZE);
                         if(i==cfd1)
                         {
                                 //game.gracz1.setHash(atoi(buf));

@@ -290,25 +290,17 @@ public class FullscreenActivity extends AppCompatActivity {
         systemGry.getListaGraczy().get(0).losujWszystkieKosci();
         bLos.setText("Wymień zaznaczone niżej kości");
         String nazwaFigury = testerFigur.znajdzFiguryIZwrocNazwe();
+        tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
         if (GameObject.getMojNumerGracza()==1){
             hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_1_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
         }
         if (GameObject.getMojNumerGracza()==2){
             hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_2_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
         }
-
-        tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
+        tvTura.setText("Tura " + 2 + "/2");
         tvNazwaFigury.setVisibility(View.VISIBLE);
 
-        serverConnect.connect();
-        serverConnect.send(hashGenerator.getHash());
-        String otrzymanyHash = serverConnect.recvResult();
-        hashGenerator.setHash(otrzymanyHash);
-        tvTura.setText("Tura " + 2 + "/2");
-        tvWynikGracza.setText("Twój Wynik: " + GameObject.getPunktyGracza());
-        tvWynikPrzeciwnika.setText("Przeciwnik: " + GameObject.getPunktyPrzeciwnika());
-        tvTmpWynikGracza.setText("Ty w tej turze: " + hashGenerator.getHash2());
-        tvTmpWynikPrzeciwnika.setText("Przeciwnik w tej turze: " + hashGenerator.getHash3());
+        zaktualizujWyniki();
 
         systemGry.setNumerTury(2);
     }
@@ -322,8 +314,14 @@ public class FullscreenActivity extends AppCompatActivity {
         for (Button b : buttons) {
             b.setBackgroundColor(Color.WHITE);
         }
-        tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());
         bLos.setVisibility(View.INVISIBLE);
+        tvNazwaFigury.setText("Twoja figura to: " + testerFigur.znajdzFiguryIZwrocNazwe());
+        if (GameObject.getMojNumerGracza()==1){
+            hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_1_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
+        }
+        if (GameObject.getMojNumerGracza()==2){
+            hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_2_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
+        }
         systemGry.setNumerRundy(systemGry.getNumerRundy() + 1);
         systemGry.setNumerTury(999);
         tvRunda.setText("Runda " + systemGry.getNumerRundy() + "/5");
@@ -335,6 +333,20 @@ public class FullscreenActivity extends AppCompatActivity {
         }
         tvTura.setText("Tura " + infinitySymbol + "/2");
 
+        zaktualizujWyniki();
+
+    }
+
+    private void zaktualizujWyniki(){
+        serverConnect.connect();
+        serverConnect.send(hashGenerator.getHash());
+        String otrzymanyHash = serverConnect.recvResult();
+        hashGenerator.setHash(otrzymanyHash);
+
+        tvWynikGracza.setText("Twój Wynik: " + GameObject.getPunktyGracza());
+        tvWynikPrzeciwnika.setText("Przeciwnik: " + GameObject.getPunktyPrzeciwnika());
+        tvTmpWynikGracza.setText("Ty w tej turze: " + hashGenerator.getHash2());
+        tvTmpWynikPrzeciwnika.setText("Przeciwnik w tej turze: " + hashGenerator.getHash3());
     }
 
 
