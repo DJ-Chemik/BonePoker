@@ -37,6 +37,21 @@ public class ServerConnect {
         }
     }
 
+    public void connect(){
+        Thread thread;
+        Runnable runnable =
+                () -> {this.preConnect();};
+        thread=new Thread(runnable);
+        thread.setDaemon(true);
+        thread.start();
+        thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void preClose(){
         try {
             socket.close();
@@ -49,21 +64,6 @@ public class ServerConnect {
         Thread thread;
         Runnable runnable =
                 () -> {this.preClose();};
-        thread=new Thread(runnable);
-        thread.setDaemon(true);
-        thread.start();
-        thread.interrupt();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void connect(){
-        Thread thread;
-        Runnable runnable =
-                () -> {this.preConnect();};
         thread=new Thread(runnable);
         thread.setDaemon(true);
         thread.start();
@@ -152,6 +152,14 @@ public class ServerConnect {
     }
 
     private int shouldStillWainting(){
+
+        int sekunda = 1000;
+        int ileSekundCzekac = 1*sekunda;
+        try {
+            Thread.sleep(ileSekundCzekac);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         GameObject.getServerConnect().connect();
         if (GameObject.getMojNumerGracza()==1){
             GameObject.getServerConnect().send(ServerConnect.HASH_C1_IS_STILL_WAIT);
@@ -166,8 +174,6 @@ public class ServerConnect {
         String stringHash = recv(false);
         int hash = Integer.parseInt(stringHash);
         //System.out.println(hash);
-        int sekunda = 1000;
-        int ileSekundCzekac = 3*sekunda;
         while(true){
             if (hash == HASH_PLAYER_NUMBER_1){
                 GameObject.setMojNumerGracza(1);
@@ -177,12 +183,6 @@ public class ServerConnect {
                 GameObject.setMojNumerGracza(2);
                 return true;
             }else if (hash == HASH_WAIT_FOR_OPPONENT){
-                try {
-                    Thread.sleep(ileSekundCzekac);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
                 hash = shouldStillWainting();
                 continue;
             }else if (hash == HASH_OPPONENT_IS_READY){
@@ -194,9 +194,25 @@ public class ServerConnect {
 
     }
 
+    public String recvResult() {
+        //String stringHash = recv(false);
+        //int hash = Integer.parseInt(stringHash);
+        int hash;
+        while (true) {
+            hash = shouldStillWainting();
+            if (hash == HASH_WAIT_FOR_OPPONENT) {
+                continue;
+            } else {
+                return String.valueOf(hash);
+            }
+
+        }
+    }
 
 
-    public int getPortServer() {
+
+
+        public int getPortServer() {
         return portServer;
     }
 

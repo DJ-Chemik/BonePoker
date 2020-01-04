@@ -343,71 +343,71 @@ int analyzeConnectionPart(int receivedHash){
 }
 
 int analyzeGamingPart(int receivedHash){
-        int whichPlayer = game.gracz1.hash0;
+        int whichPlayer = game.gracz1.getCyfraFromLiczba(receivedHash, 6);
 
-                if (receivedHash==HASH_C1_IS_STILL_WAIT){
-                        if (game.getLiczbaPrzeslanychWynikow()==1)
-                        {       
-                                return HASH_WAIT_FOR_OPPONENT;
-                        }
-                        if (game.getLiczbaPrzeslanychWynikow()==2)
+        if (receivedHash==HASH_C1_IS_STILL_WAIT){
+                if (game.getLiczbaPrzeslanychWynikow()==1)
+                {       
+                        return HASH_WAIT_FOR_OPPONENT;
+                }
+                if (game.getLiczbaPrzeslanychWynikow()==2)
+                {
+                        game.gracz1.czy_wygral=false;
+                        game.gracz2.czy_wygral=false;
+                        //zwraca wynik
+                        return whichPlayer*100000+game.gracz1.liczba_punktow*100+game.gracz2.liczba_punktow;
+                }
+        }else if(receivedHash==HASH_C2_IS_STILL_WAIT){
+                if (game.getLiczbaPrzeslanychWynikow()==1)
+                {        
+                        return HASH_WAIT_FOR_OPPONENT;
+                }
+                if (game.getLiczbaPrzeslanychWynikow()==2)
+                {
+                        game.gracz1.czy_wygral=false;
+                        game.gracz2.czy_wygral=false;
+                        game.incrementEtap();
+                        //zwraca wynik
+                        return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;       
+                }
+        }else{
+                if (game.getLiczbaPrzeslanychWynikow()==0)
+                {        
+                        if (whichPlayer==1)
                         {
-                                game.gracz1.czy_wygral=false;
-                                game.gracz2.czy_wygral=false;
-                                //zwraca wynik
+                                game.gracz1.setHash(receivedHash);
+                        }
+                        if (whichPlayer==2)
+                        {
+                                game.gracz2.setHash(receivedHash);
+                        }
+                        game.setLiczbaOtrzymanychWynikow(1);
+                        return HASH_WAIT_FOR_OPPONENT;
+                }
+                if (game.getLiczbaPrzeslanychWynikow()==1)
+                {
+                        if (whichPlayer==1)
+                        {
+                                game.gracz1.setHash(receivedHash);
+                        }
+                        if (whichPlayer==2)
+                        {
+                                game.gracz2.setHash(receivedHash);
+                        }
+                        game.porownajWynikiGraczy();
+                        game.gracz1.obliczWynikGracza();
+                        game.gracz2.obliczWynikGracza();
+                        game.setLiczbaOtrzymanychWynikow(2);
+                        if (whichPlayer==1)
+                        {
                                 return whichPlayer*100000+game.gracz1.liczba_punktow*100+game.gracz2.liczba_punktow;
                         }
-                }else if(receivedHash==HASH_C2_IS_STILL_WAIT){
-                        if (game.getLiczbaPrzeslanychWynikow()==1)
-                        {        
-                                return HASH_WAIT_FOR_OPPONENT;
-                        }
-                        if (game.getLiczbaPrzeslanychWynikow()==2)
+                        if (whichPlayer==2)
                         {
-                                game.gracz1.czy_wygral=false;
-                                game.gracz2.czy_wygral=false;
-                                game.incrementEtap();
-                                //zwraca wynik
-                                return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;       
+                                return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;
                         }
-                }else{
-                        if (game.getLiczbaPrzeslanychWynikow()==0)
-                        {        
-                                if (whichPlayer==1)
-                                {
-                                        game.gracz1.setHash(receivedHash);
-                                }
-                                if (whichPlayer==2)
-                                {
-                                        game.gracz2.setHash(receivedHash);
-                                }
-                                game.setLiczbaOtrzymanychWynikow(1);
-                                return HASH_WAIT_FOR_OPPONENT;
-                        }
-                        if (game.getLiczbaPrzeslanychWynikow()==1)
-                        {
-                                if (whichPlayer==1)
-                                {
-                                        game.gracz1.setHash(receivedHash);
-                                }
-                                if (whichPlayer==2)
-                                {
-                                        game.gracz2.setHash(receivedHash);
-                                }
-                                game.porownajWynikiGraczy();
-                                game.gracz1.obliczWynikGracza();
-                                game.gracz2.obliczWynikGracza();
-                                game.setLiczbaOtrzymanychWynikow(2);
-                                if (whichPlayer==1)
-                                {
-                                        return whichPlayer*100000+game.gracz1.liczba_punktow*100+game.gracz2.liczba_punktow;
-                                }
-                                if (whichPlayer==2)
-                                {
-                                        return whichPlayer*100000+game.gracz2.liczba_punktow*100+game.gracz1.liczba_punktow;
-                                }
-                        }            
-                }
+                }            
+        }        
         return -1; //ERROR gdy żadna z powyższych ścieżek się nie powiedzie    
 }
 

@@ -9,7 +9,8 @@ public class HashGenerator {
     private int hash2b;
     private int hash3a;
     private int hash3b;//cyfra najbardziej na prawo
-    public final int PREFIX_INFORMATION_C2S = 1;
+    public final int PREFIX_PLAYER_1_RESULTS = 1;
+    public final int PREFIX_PLAYER_2_RESULTS = 2;
     public final int PREFIX_CONFIGURATION_C2S = 9;
 
     public HashGenerator() {
@@ -26,6 +27,26 @@ public class HashGenerator {
         hash = (hash0 * (100000)) + (hash1 * (10000)) + (hash2a * (1000)) + (hash2b * (100)) +
                 (hash3a * (10)) + (hash3b * (1));
         return hash;
+    }
+
+    public void setHash(int hash) {
+        this.hash = hash;
+        hash0 = this.hash%100000 /100000 ;
+        hash1 = this.hash%100000 /10000;
+        hash2a = this.hash%10000 /1000;
+        hash2b = this.hash%1000 /100;
+        hash3a = this.hash%100 /10;
+        hash3b = this.hash%10;
+    }
+
+    public void setHash(String hash) {
+        this.hash = Integer.parseInt(hash);
+        hash0 = this.hash%100000 /100000 ;
+        hash1 = this.hash%100000 /10000;
+        hash2a = this.hash%10000 /1000;
+        hash2b = this.hash%1000 /100;
+        hash3a = this.hash%100 /10;
+        hash3b = this.hash%10;
     }
 
     public void setHash0(int hash0) {
@@ -60,6 +81,14 @@ public class HashGenerator {
 
     public int getHash1() {
         return hash1;
+    }
+
+    public int getHash2(){
+        return this.getHash2a() *10 + this.getHash2b();
+    }
+
+    public int getHash3(){
+        return this.getHash3a() *10 + this.getHash3b();
     }
 
     public int getHash2a() {

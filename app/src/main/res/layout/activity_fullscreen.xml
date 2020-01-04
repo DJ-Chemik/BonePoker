@@ -167,19 +167,19 @@
             android:id="@+id/tvTmpWynikGracza"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ty po 1 turze: 0"
-            android:textSize="24sp"
             android:layout_gravity="top|left"
-            android:layout_marginTop="80dp" />
+            android:layout_marginTop="80dp"
+            android:text="Ty w tej turze: 0"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/tvTmpWynikPrzeciwnika"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Przeciwnik po 1 turze: 0"
-            android:textSize="24sp"
             android:layout_gravity="top|left"
-            android:layout_marginTop="120dp" />
+            android:layout_marginTop="120dp"
+            android:text="Przeciwnik w tej turze: 0"
+            android:textSize="24sp" />
 
 
     </FrameLayout>

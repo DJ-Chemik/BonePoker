@@ -290,15 +290,26 @@ public class FullscreenActivity extends AppCompatActivity {
         systemGry.getListaGraczy().get(0).losujWszystkieKosci();
         bLos.setText("Wymień zaznaczone niżej kości");
         String nazwaFigury = testerFigur.znajdzFiguryIZwrocNazwe();
-        hashGenerator.setHash0(hashGenerator.PREFIX_INFORMATION_C2S); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
+        if (GameObject.getMojNumerGracza()==1){
+            hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_1_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
+        }
+        if (GameObject.getMojNumerGracza()==2){
+            hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_2_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
+        }
+
         tvNazwaFigury.setText("Twoja figura to: " + nazwaFigury);
         tvNazwaFigury.setVisibility(View.VISIBLE);
 
-        //serverConnect.connect();
+        serverConnect.connect();
         serverConnect.send(hashGenerator.getHash());
-        String otrzymanyHash = serverConnect.recv(false);
-        tvTmpWynikPrzeciwnika.setText(otrzymanyHash);
+        String otrzymanyHash = serverConnect.recvResult();
+        hashGenerator.setHash(otrzymanyHash);
         tvTura.setText("Tura " + 2 + "/2");
+        tvWynikGracza.setText("Twój Wynik: " + GameObject.getPunktyGracza());
+        tvWynikPrzeciwnika.setText("Przeciwnik: " + GameObject.getPunktyPrzeciwnika());
+        tvTmpWynikGracza.setText("Ty w tej turze: " + hashGenerator.getHash2());
+        tvTmpWynikPrzeciwnika.setText("Przeciwnik w tej turze: " + hashGenerator.getHash3());
+
         systemGry.setNumerTury(2);
     }
 
