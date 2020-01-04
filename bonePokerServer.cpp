@@ -421,10 +421,8 @@ int analyzeEndingPart(int receivedHash, Game game){
 int analyzeReceivedHash(int receivedHash, Game game){
         if (game.getNumerEtapu()==0){
                 return analyzeConnectionPart(receivedHash, game);             
-
         }else if (game.getNumerEtapu()==1){
                 return analyzeGamingPart(receivedHash,game);
-
         }else if (game.getNumerEtapu()==2){
                 return analyzeGamingPart(receivedHash,game);
         }else if (game.getNumerEtapu()==3){

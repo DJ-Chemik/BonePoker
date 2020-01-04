@@ -187,20 +187,21 @@ public class StartActivity extends AppCompatActivity {
         GameObject.getServerConnect().setIpServer(etIP.getText().toString());
         GameObject.getServerConnect().setPortServer(Integer.parseInt(etPort.getText().toString()));
         GameObject.getServerConnect().connect();
-        GameObject.getServerConnect().send(912345);
+        GameObject.getServerConnect().send(ServerConnect.HASH_CONNECT);
+        boolean czyCzekacNaSerwer=true;
 
-        if (GameObject.getServerConnect().recvSignalToStart()) {
-            System.out.println("Odebrano sygnał startu");
-            Intent i = new Intent();
-            i.setClass(StartActivity.this, FullscreenActivity.class);
-            startActivity(i);
-            finish();
-        }else{
-            System.out.println("Błąd serwera");
+        while (czyCzekacNaSerwer){
+            if (GameObject.getServerConnect().recvSignalToStart()) {
+                System.out.println("Odebrano sygnał startu");
+                czyCzekacNaSerwer=false;
+                Intent i = new Intent();
+                i.setClass(StartActivity.this, FullscreenActivity.class);
+                startActivity(i);
+                finish();
+            }else{
+                System.out.println("Oczekiwanie na przeciwnika");
+            }
         }
-
-
-
 
     }
 }
