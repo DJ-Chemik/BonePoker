@@ -298,11 +298,11 @@ public class FullscreenActivity extends AppCompatActivity {
             hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_2_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
         }
 
+        zaktualizujWyniki();
         systemGry.setNumerTury(2);
         tvTura.setText("Tura " + 2 + "/2");
         tvNazwaFigury.setVisibility(View.VISIBLE);
 
-        zaktualizujWyniki();
 
 
     }
@@ -325,7 +325,6 @@ public class FullscreenActivity extends AppCompatActivity {
             hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_2_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
         }
         systemGry.setNumerRundy(systemGry.getNumerRundy() + 1);
-        systemGry.setNumerTury(999);
         tvRunda.setText("Runda " + systemGry.getNumerRundy() + "/5");
 
         /*String infinitySymbol;
@@ -335,11 +334,10 @@ public class FullscreenActivity extends AppCompatActivity {
             infinitySymbol = "999";
         }
         tvTura.setText("Tura " + infinitySymbol + "/2");*/
+        zaktualizujWyniki();
         systemGry.setNumerTury(1);
         tvTura.setText("Tura " + 1 + "/2");
-        zaktualizujWyniki();
-        GameObject.addPunktyGracza(hashGenerator.getHash2());
-        GameObject.addPunktyPrzeciwnika(hashGenerator.getHash3());
+
 
     }
 
@@ -348,11 +346,18 @@ public class FullscreenActivity extends AppCompatActivity {
         serverConnect.send(hashGenerator.getHash());
         String otrzymanyHash = serverConnect.recvResult();
         hashGenerator.setHash(otrzymanyHash);
-
-        tvWynikGracza.setText("Twój Wynik: " + GameObject.getPunktyGracza());
-        tvWynikPrzeciwnika.setText("Przeciwnik: " + GameObject.getPunktyPrzeciwnika());
         tvTmpWynikGracza.setText("Ty w tej turze: " + hashGenerator.getHash2());
         tvTmpWynikPrzeciwnika.setText("Przeciwnik w tej turze: " + hashGenerator.getHash3());
+
+        if (systemGry.getNumerTury() == 2) {
+            GameObject.addPunktyGracza(hashGenerator.getHash2());
+            System.out.println("Hash 2 (Mój):" + hashGenerator.getHash2());
+            GameObject.addPunktyPrzeciwnika(hashGenerator.getHash3());
+            System.out.println("Hash 3 (Przeciwnik):" + hashGenerator.getHash3());
+        }
+        tvWynikGracza.setText("Twój Wynik: " + GameObject.getPunktyGracza());
+        tvWynikPrzeciwnika.setText("Przeciwnik: " + GameObject.getPunktyPrzeciwnika());
+
     }
 
 
