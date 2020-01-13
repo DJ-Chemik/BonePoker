@@ -496,7 +496,7 @@ int main()
         int cfd1;
         int respondHash;
 
-        int wynikSelect = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, &timeout);
+        int wynikSelect = select(fdmax + 1, &rmask, &wmask, (fd_set *)0, NULL);
         if (wynikSelect == 0)
         {
             printf("timed out\n");

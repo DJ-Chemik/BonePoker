@@ -127,8 +127,10 @@ public class FullscreenActivity extends AppCompatActivity {
         systemGry.setNumerTury(1);
         systemGry.setNumerRundy(1);
 
-        tvRunda.setText("Runda " + 1 + "/5");
+        tvRunda.setText("Runda " + 1 + "/3");
         tvTura.setText("Tura " + 1 + "/2");
+        GameObject.setPunktyGracza(0);
+        GameObject.setPunktyPrzeciwnika(0);
 
 
     }
@@ -277,13 +279,14 @@ public class FullscreenActivity extends AppCompatActivity {
 
         if (numerTury == 1) {
             rozegrajTure1();
+            wypiszNumeryKosci();
 
         } else if (numerTury == 2) {
             rozegrajTure2();
+            wypiszNumeryKosci();
+
+
         }
-
-        wypiszNumeryKosci();
-
     }
 
     private void rozegrajTure1() {
@@ -302,8 +305,6 @@ public class FullscreenActivity extends AppCompatActivity {
         systemGry.setNumerTury(2);
         tvTura.setText("Tura " + 2 + "/2");
         tvNazwaFigury.setVisibility(View.VISIBLE);
-
-
 
     }
 
@@ -324,21 +325,36 @@ public class FullscreenActivity extends AppCompatActivity {
         if (GameObject.getMojNumerGracza()==2){
             hashGenerator.setHash0(hashGenerator.PREFIX_PLAYER_2_RESULTS); //Hash który został wygenerowany oznacz jako infomracyjny o wynikach
         }
-        systemGry.setNumerRundy(systemGry.getNumerRundy() + 1);
-        tvRunda.setText("Runda " + systemGry.getNumerRundy() + "/5");
 
-        /*String infinitySymbol;
+        resetujDoNowejTury();
+        if (systemGry.getNumerRundy()<3){
+            systemGry.setNumerRundy(systemGry.getNumerRundy() + 1);
+            tvRunda.setText("Runda " + systemGry.getNumerRundy() + "/3");
+
+             /*String infinitySymbol;
         try {
             infinitySymbol = new String(String.valueOf(Character.toString('\u221E')).getBytes("UTF-8"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             infinitySymbol = "999";
         }
         tvTura.setText("Tura " + infinitySymbol + "/2");*/
-        zaktualizujWyniki();
-        systemGry.setNumerTury(1);
-        tvTura.setText("Tura " + 1 + "/2");
+            zaktualizujWyniki();
+            systemGry.setNumerTury(1);
+            tvTura.setText("Tura " + 1 + "/2");
+        }else if(systemGry.getNumerRundy()==3){
+            zaktualizujWyniki();
+            serverConnect.connect();
+            serverConnect.send(ServerConnect.HASH_END_GAME);
+            if (GameObject.getPunktyGracza()>GameObject.getPunktyPrzeciwnika()){
+                tvNazwaFigury.setText("Wygrałeś grę :)");
+            }else if(GameObject.getPunktyGracza()<GameObject.getPunktyPrzeciwnika()){
+                tvNazwaFigury.setText("Niestety przegrałeś :(");
+            }else{
+                tvNazwaFigury.setText("Remis :|");
+            }
 
 
+        }
     }
 
     private void zaktualizujWyniki(){
@@ -351,12 +367,29 @@ public class FullscreenActivity extends AppCompatActivity {
 
         if (systemGry.getNumerTury() == 2) {
             GameObject.addPunktyGracza(hashGenerator.getHash2());
-            System.out.println("Hash 2 (Mój):" + hashGenerator.getHash2());
             GameObject.addPunktyPrzeciwnika(hashGenerator.getHash3());
-            System.out.println("Hash 3 (Przeciwnik):" + hashGenerator.getHash3());
         }
         tvWynikGracza.setText("Twój Wynik: " + GameObject.getPunktyGracza());
         tvWynikPrzeciwnika.setText("Przeciwnik: " + GameObject.getPunktyPrzeciwnika());
+
+    }
+
+    private void resetujDoNowejTury(){
+        tvTmpWynikGracza.setText("Ty w tej turze: " + 0);
+        tvTmpWynikPrzeciwnika.setText("Przeciwnik w tej turze: " + 0);
+        buttons.get(0).setText("Kość 1");
+        buttons.get(1).setText("Kość 2");
+        buttons.get(2).setText("Kość 3");
+        buttons.get(3).setText("Kość 4");
+        buttons.get(4).setText("Kość 5");
+        if (systemGry.getNumerRundy()!=3){
+            tvNazwaFigury.setVisibility(View.INVISIBLE);
+            bLos.setText("Losuj Kości");
+            bLos.setVisibility(View.VISIBLE);
+        }else{
+            /*bLos.setText("Kliknij by rozegrać kolejną grę :)");
+            bLos.setVisibility(View.VISIBLE);*/
+        }
 
     }
 

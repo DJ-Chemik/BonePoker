@@ -26,7 +26,11 @@ public class GameObject {
     }
 
     public static int addPunktyGracza(int ileDodac){
-        punktyGracza+=ileDodac;
+        if(ileDodac==90){
+
+        }else{
+            punktyGracza+=ileDodac;
+        }
         return punktyGracza;
     }
 

@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|right"
             android:layout_marginTop="0dp"
-            android:text="Runda 0/5"
+            android:text="Runda 0/3"
             android:textSize="24sp" />
 
         <TextView
