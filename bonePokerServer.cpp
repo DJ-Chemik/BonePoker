@@ -488,7 +488,8 @@ int main()
     static struct timeval timeout;
     timeout.tv_sec = 5 * 60;
     timeout.tv_usec = 0;
-    
+    int nrKlienta = 1;
+    int pid;
     while(true)
     {
         displayEtapNumberToConsole();
@@ -512,9 +513,31 @@ int main()
                 cout<<"Connection from : "<<inet_ntoa(client1_addr.sin_addr)<<":"<<client1_addr.sin_port<<endl; 
                 FD_SET(cfd1, &rmask);
 
-                if (cfd1>fdmax)
-                {
-                        fdmax=cfd1;
+                if (cfd1>fdmax){
+                    fdmax=cfd1;
+                }
+
+                
+                if (nrKlienta==1){                    
+                    pid=fork();   
+                    if (pid==0){ //proces potomny
+                        
+
+                    }
+                    if (pid>0){ //proces macierzysty
+                        close(cfd1);
+                    }
+                    nrKlienta=2;
+                }else if (nrKlienta==2){
+                    if (pid==0){ //proces potomny
+                        
+
+                    }
+                    if (pid>0){ //proces macierzysty
+                        close(cfd1);
+
+                    }
+                    nrKlienta=1;
                 }
                   
         }
